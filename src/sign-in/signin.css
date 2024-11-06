@@ -1,0 +1,28 @@
+.SignIn {
+  background-image: url("../../public/img/background.svg");
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  text-align: left;
+  padding: 20pt;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+}
+
+button.custom-btn {
+  background-color: #d2e2ff;
+  font-weight: bold;
+  border-radius: 20px;
+}
+
+button.custom-btn:hover,
+button.custom-btn:active,
+button.custom-btn:focus,
+button.custom-btn:not(:disabled):not(:disabled):active {
+  background-color: #d2e2ff;
+}
