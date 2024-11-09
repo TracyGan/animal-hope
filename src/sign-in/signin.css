@@ -26,3 +26,7 @@ button.custom-btn:focus,
 button.custom-btn:not(:disabled):not(:disabled):active {
   background-color: #d2e2ff;
 }
+
+.title {
+  font-size: 80px;
+}
