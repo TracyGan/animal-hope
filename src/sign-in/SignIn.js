@@ -7,7 +7,7 @@ function SignIn() {
         <div className="row">
           <div className="col-3"></div>
           <div className="col-6">
-            <h1 className="mt-5 mb-5 fw-bold"> AnimalHope</h1>
+            <h1 className="mt-5 mb-5 fw-bold title"> AnimalHope</h1>
             <div className="card">
               <div className="row">
                 <div className="col">
