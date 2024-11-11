@@ -1,4 +1,5 @@
 import "./signin.css";
+import React, { useState } from "react";
 
 function SignIn() {
   return (
@@ -32,13 +33,16 @@ function SignIn() {
                         className="form-control"
                         id="exampleInputPassword1"
                       ></input>
+                      <p className="error-msg mt-1">
+                        The password you entered is incorrect.{" "}
+                      </p>
                     </div>
                   </form>
                 </div>
               </div>
               <button
                 type="button"
-                className="btn btn-lg custom-btn btn-block mt-5"
+                className="btn btn-lg custom-btn btn-block mt-4"
               >
                 Sign In
               </button>
