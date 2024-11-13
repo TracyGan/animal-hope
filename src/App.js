@@ -2,6 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import SignIn from "./sign-in/SignIn.js";
 import DonationLog from "./donation/DonationLog.js";
+import Food from "./food/Food.js";
 
 // Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,7 +14,8 @@ function App() {
     <div className="App">
       <header className="App-header">
         {/* <SignIn></SignIn> */}
-        <DonationLog></DonationLog>
+        {/* <DonationLog></DonationLog> */}
+        <Food></Food>
       </header>
     </div>
   );

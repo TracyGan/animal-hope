@@ -1,5 +1,5 @@
-import "./Donation.css";
 import DataTable from "react-data-table-component";
+import "../sign-in/signin.css";
 
 const columns = [
   {
@@ -18,12 +18,10 @@ const columns = [
   {
     name: "Date",
     selector: (row) => row.date,
-    sortable: true,
   },
   {
     name: "Amount",
     selector: (row) => row.amount,
-    sortable: true,
     maxWidth: "2px",
   },
 ];
@@ -115,7 +113,24 @@ function DonationLog() {
         <div className="row">
           <div className="col-1"></div>
           <div className="col-9">
-            <h1 className="heading fw-bold mt-5">Donation log</h1>
+            <h1
+              className="heading fw-bold mt-5"
+              style={{ color: "black", textAlign: "left" }}
+            >
+              Donation log
+            </h1>
+            <p className="" style={{ color: "black", textAlign: "left" }}>
+              Average donations per week:
+            </p>
+
+            <div className="col-3 ms-auto mb-1">
+              <select className="form-select" id="filterSelect">
+                <option value="all">Most Recent</option>
+                <option value="name">Largest Amount</option>
+                <option value="age">Smallest Amount</option>
+                <option value="age">Largest Client</option>
+              </select>
+            </div>
             <DataTable columns={columns} data={data} pagination></DataTable>
           </div>
         </div>

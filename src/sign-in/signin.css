@@ -25,6 +25,7 @@ button.custom-btn:active,
 button.custom-btn:focus,
 button.custom-btn:not(:disabled):not(:disabled):active {
   background-color: #d2e2ff;
+  color: black;
 }
 
 .title {
