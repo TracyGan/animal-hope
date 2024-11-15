@@ -1,4 +1,4 @@
-import "./clientprofiles.css"
+import "./profiles.css"
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
 
@@ -92,6 +92,25 @@ const clients = [
         fCertId: 5955,
         adopted: 0,
         fostered: 10
+      },
+      {
+        name: "Audrey",
+        id: 3245,
+        address: "2384 Garden Dr",
+        donations: 161,
+        aCertId: 9585,
+        fCertId: 5955,
+        adopted: 0,
+        fostered: 10
+      },      {
+        name: "Paxton",
+        id: 7421,
+        address: "2384 Garden Dr",
+        donations: 161,
+        aCertId: 9585,
+        fCertId: 5955,
+        adopted: 0,
+        fostered: 10
       }
   ];
 
@@ -110,17 +129,17 @@ function ClientList() {
     return (
         <>
         <div><h1
-        className="heading fw-bold mt-5 header"
-        style={{ color: "black", textAlign: "center" }}>
+        className="heading fw-bold mt-5 header">
         Clients
         <hr></hr>
       </h1>
         </div>
         <div className="container">
-        <div className="column names">{GetColumnContents(0, Math.floor(clients.length / 3))}</div>
-        <div className="column names">{GetColumnContents(Math.floor(clients.length / 3), Math.floor(2 * clients.length / 3))}</div>
-        <div className="column names">{GetColumnContents(Math.floor(2 * clients.length / 3), clients.length)}</div>
+        <div className="column names">{GetColumnContents(0, Math.ceil(clients.length / 3))}</div>
+        <div className="column names">{GetColumnContents(Math.ceil(clients.length / 3), Math.ceil(2 * clients.length / 3))}</div>
+        <div className="column names">{GetColumnContents(Math.ceil(2 * clients.length / 3), clients.length)}</div>
         </div>
+        <button className="addButton">Add New Client</button>
     </>
     )
 }

@@ -1,0 +1,84 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    width: 100%;
+}
+  
+  .column {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .names {
+    color: black;
+    text-align: center;
+  }
+
+  .centredTable {
+    margin: 0 auto;
+  }
+
+  .clientKeys {
+    text-align: left;
+    color: black;
+    font-weight: bold;
+    padding-inline: 20px;
+  }
+
+  .addButton {
+    margin: 0 auto;
+    padding: 2px 4px;
+    width: 130px;
+    font-size: 15px;
+    color: rgb(88, 141, 85);
+    background-color: rgb(211, 254, 208);
+    border-color: rgb(88, 141, 85);
+    border-style: solid;
+    border-radius: 8px;
+  }
+
+  td {
+    text-align: left;
+  }
+
+  td.profileInfo {
+    padding-inline: 10px;
+  }
+
+  table.profileInfo {
+    margin: 0 auto;
+  }
+
+  .header {
+    color: black;
+    text-align: center;
+  }
+
+  .profileButton {
+    background-color: rgb(196, 237, 255);
+    padding: 12px 6px 12px 12px;
+    border-style: unset;
+    border-color: rgb(151, 216, 244);
+    border-radius: 10px;
+    font-size: 15px;
+    width: 400px;
+  }
+
+  .animalImg {
+    padding-bottom: 10px;
+    object-fit: cover;
+    max-width: 70%;
+    height: auto;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .searchBox {
+    margin-top: 20px;
+    width: 200px;
+    height: 40px;
+  }
