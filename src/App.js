@@ -3,6 +3,7 @@ import "./App.css";
 import SignIn from "./sign-in/SignIn.js";
 import DonationLog from "./donation/DonationLog.js";
 import Food from "./food/Food.js";
+import ClientProfiles from "./client/ClientProfiles.js";
 
 // Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -15,7 +16,8 @@ function App() {
       <header className="App-header">
         {/* <SignIn></SignIn> */}
         {/* <DonationLog></DonationLog> */}
-        <Food></Food>
+        {/* <Food></Food> */}
+        {<ClientProfiles></ClientProfiles>}
       </header>
     </div>
   );
