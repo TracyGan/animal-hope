@@ -14,6 +14,13 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
+  "options": {
+    "allowedHosts": [
+      "localhost",
+      ".localhost"
+    ],
+    "proxy": "http://localhost:65535"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

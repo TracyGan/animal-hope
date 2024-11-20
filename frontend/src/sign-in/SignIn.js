@@ -1,7 +1,16 @@
 import "./signin.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function SignIn() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/data")
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+      });
+  }, []);
   return (
     <div className="SignIn">
       <div className="container">
@@ -13,7 +22,7 @@ function SignIn() {
               <div className="row">
                 <div className="col">
                   <h2 className="fw-bold">Sign In</h2>
-                  <span id="dbStatus"></span>
+                  <span className="">{data} </span>
                 </div>
               </div>
               <div className="row mt-2">
@@ -54,30 +63,5 @@ function SignIn() {
     </div>
   );
 }
-
-// This function checks the database connection and updates its status on the frontend.
-async function checkDbConnection() {
-  const statusElem = document.getElementById("dbStatus");
-
-  const response = await fetch("/check-db-connection", {
-    method: "GET",
-  });
-
-  // Display the statusElem's text in the placeholder.
-  statusElem.style.display = "inline";
-
-  response
-    .text()
-    .then((text) => {
-      statusElem.textContent = text;
-    })
-    .catch((error) => {
-      statusElem.textContent = "connection timed out"; // Adjust error handling if required.
-    });
-}
-
-window.onload = function () {
-  checkDbConnection();
-};
 
 export default SignIn;
