@@ -105,6 +105,24 @@ async function initiateDemotable() {
   });
 }
 
+async function validateSignIn(username, password) {
+  return await withOracleDB(async (connection) => {
+    console.log("in appservice");
+    const result = await connection.execute(
+      `SELECT * FROM PaidStaff WHERE TRIM(Username) =: username AND TRIM(Password) =: password`,
+      [username, password],
+
+      { autoCommit: true }
+    );
+    console.log("end");
+    console.log(result);
+    console.log(result.rows);
+    return result.rows && result.rows.length > 0;
+  }).catch(() => {
+    return false;
+  });
+}
+
 async function insertDemotable(id, name) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
@@ -149,4 +167,5 @@ module.exports = {
   insertDemotable,
   updateNameDemotable,
   countDemotable,
+  validateSignIn,
 };
