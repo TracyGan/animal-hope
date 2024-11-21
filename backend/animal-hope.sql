@@ -1,29 +1,29 @@
-DROP TABLE Volunteer;
-DROP TABLE Food;
 DROP TABLE Appointment;
 DROP TABLE AnimalTypes;
-DROP TABLE Animal;
 DROP TABLE Walks;
-DROP TABLE PaidStaff;
 DROP TABLE Feed;
 DROP TABLE VetVisit;
 DROP TABLE TreatedBy;
-DROP TABLE Client;
-DROP TABLE Fosters;
-DROP TABLE Adopts;
-DROP TABLE Makes;
+-- DROP TABLE Client;
+-- DROP TABLE Fosters;
+-- DROP TABLE Adopts;
+-- DROP TABLE Makes;
 DROP TABLE Orders;
-DROP TABLE Donation;
+-- DROP TABLE Donation;
+DROP TABLE Animal;
+DROP TABLE Food;
+DROP TABLE Volunteer;
+DROP TABLE PaidStaff;
 
 
 CREATE TABLE Volunteer(
     ID INTEGER PRIMARY KEY,
-    Name CHAR(20) NOT NULL
+    Name VARCHAR2(20) NOT NULL
 );
 
 CREATE TABLE Food(
-    Brand CHAR(20),
-    Name VARCHAR,
+    Brand VARCHAR2(20),
+    Name VARCHAR2(80),
     AmountInStock INTEGER NOT NULL,
     Price FLOAT NOT NULL,
     PRIMARY KEY(Brand, Name)
@@ -31,21 +31,21 @@ CREATE TABLE Food(
 
 CREATE TABLE Appointment(
     ID INTEGER PRIMARY KEY,
-    DateTime DATETIME NOT NULL,
-    Location VARCHAR NOT NULL
+    DateTime TIMESTAMP NOT NULL,
+    Location VARCHAR2(100) NOT NULL
 );
 
 CREATE TABLE AnimalTypes(
-    Breed VARCHAR PRIMARY KEY,
-    Type CHAR(20) NOT NULL
+    Breed VARCHAR2(50) PRIMARY KEY,
+    Type VARCHAR2(20) NOT NULL
 );
 
 CREATE TABLE Animal(
     ID INTEGER PRIMARY KEY,
-    Name CHAR(20) NOT NULL,
-    ArrivalDate DATETIME NOT NULL,
+    Name VARCHAR2(20) NOT NULL,
+    ArrivalDate TIMESTAMP NOT NULL,
     Age INTEGER NOT NULL,
-    Breed VARCHAR NOT NULL
+    Breed VARCHAR2(50) NOT NULL
 );
 
 CREATE TABLE Walks(
@@ -53,20 +53,20 @@ CREATE TABLE Walks(
     Animal_ID INTEGER NOT NULL,
     Volunteer_ID INTEGER NOT NULL,
     Duration FLOAT,
-    DateTime DATETIME NOT NULL,
+    DateTime TIMESTAMP NOT NULL,
     FOREIGN KEY(Animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE,
     FOREIGN KEY(Volunteer_ID) REFERENCES Volunteer(ID) ON DELETE CASCADE
 );
 
 CREATE TABLE PaidStaff(
-    Username VARCHAR(20) PRIMARY KEY,
-    Password VARCHAR(20) NOT NULL,
-    Name VARCHAR(20) NOT NULL,
+    Username VARCHAR2(20) PRIMARY KEY,
+    Password VARCHAR2(20) NOT NULL,
+    Name VARCHAR2(20) NOT NULL,
     Salary FLOAT NOT NULL,
     Age INT,
     OfficeNumber INT,
     TrainingID INT,
-    University VARCHAR,
+    University VARCHAR2(70),
     CHECK (OfficeNumber IS NOT NULL OR TrainingID IS NOT NULL OR University IS NOT NULL), 
     CHECK ((OfficeNumber IS NOT NULL AND TrainingID IS NULL AND University IS NULL) OR 
     (OfficeNumber IS NULL AND TrainingID IS NOT NULL AND University IS NULL) OR 
@@ -76,10 +76,10 @@ CREATE TABLE PaidStaff(
 CREATE TABLE Feed(
     ID INTEGER PRIMARY KEY,
     Animal_ID INTEGER NOT NULL,
-    PaidStaff_Username CHAR(20) NOT NULL,
-    Food_Brand CHAR(20) NOT NULL,
-    Food_Name VARCHAR NOT NULL,
-    DateTime DATETIME NOT NULL,
+    PaidStaff_Username VARCHAR2(20) NOT NULL,
+    Food_Brand VARCHAR2(20) NOT NULL,
+    Food_Name VARCHAR2(80) NOT NULL,
+    DateTime TIMESTAMP NOT NULL,
     FOREIGN KEY(Animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE,
     FOREIGN KEY(PaidStaff_Username) REFERENCES PaidStaff(Username) ON DELETE CASCADE,
     FOREIGN KEY(Food_Brand, Food_Name) REFERENCES Food(Brand, Name) ON DELETE CASCADE
@@ -88,14 +88,14 @@ CREATE TABLE Feed(
 CREATE TABLE VetVisit(
     ID INTEGER PRIMARY KEY,
     Animal_ID INTEGER NOT NULL,
-    DateTime DATETIME NOT NULL,
-    FOREIGN KEY(Animal_ID) Animal(ID) ON DELETE CASCADE
+    DateTime TIMESTAMP NOT NULL,
+    FOREIGN KEY(Animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE
 );
 
 CREATE TABLE TreatedBy(
     Animal_ID INTEGER,
-    PaidStaff_Username CHAR(20) NOT NULL,
-    DateTime DATETIME,
+    PaidStaff_Username VARCHAR2(20) NOT NULL,
+    DateTime TIMESTAMP,
     FOREIGN KEY(Animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE,
     FOREIGN KEY(PaidStaff_Username) REFERENCES PaidStaff(Username) ON DELETE CASCADE,
     PRIMARY KEY (DateTime, Animal_ID)
@@ -139,10 +139,10 @@ CREATE TABLE TreatedBy(
 -- );
 
 CREATE TABLE Orders(
-    Food_Brand VARCHAR,
-    Food_Name CHAR(20),
-    PaidStaff_Username CHAR(20),
-    DateTime DATETIME NOT NULL,
+    Food_Brand VARCHAR2(20),
+    Food_Name VARCHAR2(80),
+    PaidStaff_Username VARCHAR2(20),
+    DateTime TIMESTAMP NOT NULL,
     FOREIGN KEY (Food_Brand, Food_Name) REFERENCES Food(Brand, Name) ON DELETE CASCADE,
     FOREIGN KEY (PaidStaff_Username) REFERENCES PaidStaff(Username) ON DELETE CASCADE,
     PRIMARY KEY(Food_Brand, Food_Name, PaidStaff_Username)
@@ -159,15 +159,6 @@ CREATE TABLE Orders(
 
 
 -- Food
-
-CREATE TABLE Food(
-    Brand CHAR(20),
-    Name VARCHAR,
-    AmountInStock INTEGER NOT NULL,
-    Price FLOAT NOT NULL,
-    PRIMARY KEY(Brand, Name)
-);
-
 INSERT INTO Food
 VALUES ('Purina', 'Pro Plan Live Clear', 10, 40.0);
 

@@ -109,7 +109,7 @@ async function validateSignIn(username, password) {
   return await withOracleDB(async (connection) => {
     console.log("in appservice");
     const result = await connection.execute(
-      `SELECT * FROM PaidStaff WHERE TRIM(Username) =: username AND TRIM(Password) =: password`,
+      `SELECT * FROM PaidStaff WHERE Username =: username AND Password =: password`,
       [username, password],
 
       { autoCommit: true }
