@@ -87,9 +87,7 @@ async function fetchDemotableFromDb() {
 
 async function fetchFoodtable() {
   return await withOracleDB(async (connection) => {
-    console.log("in app service");
     const result = await connection.execute(`SELECT * FROM Food`);
-    console.log(result);
     return result.rows;
   }).catch(() => {
     return [];
@@ -125,9 +123,6 @@ async function validateSignIn(username, password) {
 
       { autoCommit: true }
     );
-    console.log("end");
-    console.log(result);
-    console.log(result.rows);
     return result.rows && result.rows.length > 0;
   }).catch(() => {
     return false;
@@ -139,6 +134,20 @@ async function insertDemotable(id, name) {
     const result = await connection.execute(
       `INSERT INTO DEMOTABLE (id, name) VALUES (:id, :name)`,
       [id, name],
+      { autoCommit: true }
+    );
+
+    return result.rowsAffected && result.rowsAffected > 0;
+  }).catch(() => {
+    return false;
+  });
+}
+
+async function updateFoodtable(price, amount, name, brand) {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `UPDATE FOOD SET Price=:price AND Amount=:amount WHERE Name=:name AND Brand=:brand`,
+      [price, amount, name, brand],
       { autoCommit: true }
     );
 
@@ -180,4 +189,5 @@ module.exports = {
   countDemotable,
   validateSignIn,
   fetchFoodtable,
+  updateFoodtable,
 };

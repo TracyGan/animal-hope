@@ -30,23 +30,35 @@ router.post("/initiate-demotable", async (req, res) => {
 });
 
 router.post("/validate-signin", async (req, res) => {
-  console.log("in appController");
   const { username, password } = req.body;
 
   const result = await appService.validateSignIn(username, password);
   if (result) {
     res.json({ success: true });
-    console.log("successful in appController");
   } else {
     res.status(500).json({ success: false });
   }
 });
 
 router.get("/fetch-foodtable", async (req, res) => {
-  console.log("in app controller");
   const tableContent = await appService.fetchFoodtable();
-  console.log(tableContent);
   res.json({ data: tableContent });
+});
+
+router.get("/update-foodtable", async (req, res) => {
+  console.log("in appcontroller update food table");
+  const { price, amount, name, brand } = req.body;
+  const updateResult = await appService.updateFoodtable(
+    price,
+    amount,
+    name,
+    brand
+  );
+  if (updateResult) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ success: false });
+  }
 });
 
 router.post("/insert-demotable", async (req, res) => {
