@@ -42,6 +42,13 @@ router.post("/validate-signin", async (req, res) => {
   }
 });
 
+router.get("/fetch-foodtable", async (req, res) => {
+  console.log("in app controller");
+  const tableContent = await appService.fetchFoodtable();
+  console.log(tableContent);
+  res.json({ data: tableContent });
+});
+
 router.post("/insert-demotable", async (req, res) => {
   const { id, name } = req.body;
   const insertResult = await appService.insertDemotable(id, name);

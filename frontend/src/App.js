@@ -13,9 +13,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <SignIn></SignIn>
+        {/* <SignIn></SignIn> */}
         {/* <DonationLog></DonationLog> */}
-        {/* <Food></Food> */}
+        <Food></Food>
       </header>
     </div>
   );

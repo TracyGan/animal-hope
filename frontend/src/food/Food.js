@@ -1,28 +1,29 @@
 import "./Food.css";
 import DataTable from "react-data-table-component";
+import React, { useState, useEffect } from "react";
 
 const columns = [
   {
     name: "Name",
-    selector: (row) => row.name,
+    selector: (row) => row.Name,
   },
   {
     name: "Brand",
-    selector: (row) => row.brand,
+    selector: (row) => row.Brand,
   },
   {
     name: "Price",
-    selector: (row) => row.price,
+    selector: (row) => row.Price,
   },
   {
     name: "Amount in Stock",
-    selector: (row) => row.amount,
+    selector: (row) => row.AmountInStock,
   },
   {
     name: "Other remarks",
     cell: (row) => {
       const threshold = 10;
-      if (row.amount == 0) {
+      if (row.AmountInStock == 0) {
         return (
           <div>
             <i
@@ -35,7 +36,7 @@ const columns = [
         );
       }
 
-      if (row.amount < threshold) {
+      if (row.AmountInStock < threshold) {
         return (
           <div>
             <i
@@ -51,87 +52,35 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    id: 1,
-    name: "John Doe",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 300,
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 2,
-  },
-  {
-    id: 3,
-    name: "Robert Brown",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 50,
-  },
-  {
-    id: 4,
-    name: "Emily White",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 100,
-  },
-  {
-    id: 5,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 150,
-  },
-  {
-    id: 6,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 150,
-  },
-  {
-    id: 7,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 1,
-  },
-  {
-    id: 8,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 0,
-  },
-  {
-    id: 9,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 5,
-  },
-  {
-    id: 10,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 150,
-  },
-  {
-    id: 11,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 20,
-    amount: 150,
-  },
-];
-
 function Food() {
+  const [foodData, showFoodLog] = useState([]);
+
+  useEffect(() => {
+    console.log("in use effect");
+    const fetchFoodLog = async () => {
+      try {
+        const response = await fetch("/backend/fetch-foodtable", {
+          method: "GET",
+        });
+
+        const responseData = await response.json();
+        console.log("response data: ", responseData.data);
+
+        const formatedResponse = responseData.data.map((item) => ({
+          Name: item[1],
+          Brand: item[0],
+          Price: item[3],
+          AmountInStock: item[2],
+        }));
+        showFoodLog(formatedResponse);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchFoodLog();
+  }, []);
+
   return (
     <div className="Food">
       <div className="container-fluid">
@@ -144,7 +93,7 @@ function Food() {
             >
               Food Log
             </h1>
-            <DataTable columns={columns} data={data} pagination></DataTable>
+            <DataTable columns={columns} data={foodData} pagination></DataTable>
           </div>
         </div>
       </div>

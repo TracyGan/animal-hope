@@ -85,6 +85,17 @@ async function fetchDemotableFromDb() {
   });
 }
 
+async function fetchFoodtable() {
+  return await withOracleDB(async (connection) => {
+    console.log("in app service");
+    const result = await connection.execute(`SELECT * FROM Food`);
+    console.log(result);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
 async function initiateDemotable() {
   return await withOracleDB(async (connection) => {
     try {
@@ -168,4 +179,5 @@ module.exports = {
   updateNameDemotable,
   countDemotable,
   validateSignIn,
+  fetchFoodtable,
 };
