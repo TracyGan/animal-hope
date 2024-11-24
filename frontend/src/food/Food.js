@@ -82,6 +82,7 @@ function Food() {
   const [brand, setBrand] = useState(null);
   const [inputPrice, changePrice] = useState(foodData[0]?.Price || 0);
   const [inputStock, changeStock] = useState(foodData[0]?.AmountInStock || 0);
+  const [successUpdate, changeUpdate] = useState(false);
 
   const handleChange = (e) => {
     setSelectedOption(e.target.value);
@@ -103,36 +104,42 @@ function Food() {
     changeStock(e.target.value);
   };
 
+  const clearData = () => {
+    setSelectedOption("");
+    setName("");
+    setBrand("");
+    changePrice("");
+    changeStock("");
+  };
+
   const updateFood = async (event) => {
     event.preventDefault();
 
     const price = document.getElementById("inputPrice").value;
     const amount = document.getElementById("inputStock").value;
-    console.log("update price: ", inputPrice);
-    console.log("update amount: ", inputStock);
 
-    const response = await fetch("/update-foodtable", {
+    const response = await fetch("/backend/update-food", {
       method: "POST",
-      header: {
+      headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        Price: parseFloat(price),
-        AmountInStock: parseInt(amount),
-        Name: name,
-        Brand: brand,
+        price: parseFloat(price),
+        amount: parseInt(amount),
+        name: name,
+        brand: brand,
       }),
     });
 
     const responseData = await response.json();
-    const messageElement = document.getElementById("success");
-
+    changeUpdate(responseData);
     if (responseData.success) {
       fetchFoodLog();
       console.log("Success!");
     } else {
       console.log("error updating table");
     }
+    clearData();
   };
 
   return (
@@ -156,14 +163,16 @@ function Food() {
               >
                 Update
               </button>
-              <i
-                id="success"
-                className="bi bi-check-circle ms-3"
-                style={{ color: "black", fontSize: "16px" }}
-              >
-                {" "}
-                Successfully updated!
-              </i>
+              {successUpdate && (
+                <i
+                  id="success"
+                  className="bi bi-check-circle ms-3"
+                  style={{ color: "black", fontSize: "16px" }}
+                >
+                  {" "}
+                  Successfully updated!
+                </i>
+              )}
 
               <div
                 className="modal fade"
@@ -188,9 +197,10 @@ function Food() {
                       <select
                         className="form-select mb-3"
                         value={selectedOption}
+                        defaultValue=""
                         onChange={handleChange}
                       >
-                        <option value="" disabled selected>
+                        <option value="" disabled>
                           Select Brand - Name
                         </option>
                         {foodData.map((option, index) => (

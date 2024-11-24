@@ -145,13 +145,17 @@ async function insertDemotable(id, name) {
 
 async function updateFoodtable(price, amount, name, brand) {
   return await withOracleDB(async (connection) => {
+    console.log("app service - update food");
+    console.log(price);
+    console.log(amount);
     const result = await connection.execute(
-      `UPDATE FOOD SET Price=:price AND Amount=:amount WHERE Name=:name AND Brand=:brand`,
+      `UPDATE Food SET Price=:price, AmountInStock=:amount WHERE Name=:name AND Brand=:brand`,
       [price, amount, name, brand],
       { autoCommit: true }
     );
-
-    return result.rowsAffected && result.rowsAffected > 0;
+    console.log("result");
+    return true;
+    // return result.rowsAffected && result.rowsAffected > 0;
   }).catch(() => {
     return false;
   });

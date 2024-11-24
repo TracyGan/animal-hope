@@ -45,8 +45,7 @@ router.get("/fetch-foodtable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
-router.get("/update-foodtable", async (req, res) => {
-  console.log("in appcontroller update food table");
+router.post("/update-food", async (req, res) => {
   const { price, amount, name, brand } = req.body;
   const updateResult = await appService.updateFoodtable(
     price,
