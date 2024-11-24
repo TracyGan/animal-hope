@@ -85,6 +85,15 @@ async function fetchDemotableFromDb() {
   });
 }
 
+async function fetchFoodtable() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(`SELECT * FROM Food`);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
 async function initiateDemotable() {
   return await withOracleDB(async (connection) => {
     try {
@@ -105,6 +114,21 @@ async function initiateDemotable() {
   });
 }
 
+async function validateSignIn(username, password) {
+  return await withOracleDB(async (connection) => {
+    console.log("in appservice");
+    const result = await connection.execute(
+      `SELECT * FROM PaidStaff WHERE Username =: username AND Password =: password`,
+      [username, password],
+
+      { autoCommit: true }
+    );
+    return result.rows && result.rows.length > 0;
+  }).catch(() => {
+    return false;
+  });
+}
+
 async function insertDemotable(id, name) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
@@ -114,6 +138,24 @@ async function insertDemotable(id, name) {
     );
 
     return result.rowsAffected && result.rowsAffected > 0;
+  }).catch(() => {
+    return false;
+  });
+}
+
+async function updateFoodtable(price, amount, name, brand) {
+  return await withOracleDB(async (connection) => {
+    console.log("app service - update food");
+    console.log(price);
+    console.log(amount);
+    const result = await connection.execute(
+      `UPDATE Food SET Price=:price, AmountInStock=:amount WHERE Name=:name AND Brand=:brand`,
+      [price, amount, name, brand],
+      { autoCommit: true }
+    );
+    console.log("result");
+    return true;
+    // return result.rowsAffected && result.rowsAffected > 0;
   }).catch(() => {
     return false;
   });
@@ -149,4 +191,7 @@ module.exports = {
   insertDemotable,
   updateNameDemotable,
   countDemotable,
+  validateSignIn,
+  fetchFoodtable,
+  updateFoodtable,
 };

@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 65534; // Adjust the PORT if needed (e.g., if y
 // Middleware setup
 //p0
 //app.use(express.static("../frontend/public/index.html"));
-//app.use(express.static("public")); // Serve static files from the 'public' directory
+//app.use(express.static("../frontend/src/index.js")); // Serve static files from the 'public' directory
 app.use(express.json()); // Parse incoming JSON payloads
 
 // If you prefer some other file as default page other than 'index.html',

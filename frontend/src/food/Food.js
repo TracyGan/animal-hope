@@ -1,28 +1,28 @@
-import "./Food.css";
 import DataTable from "react-data-table-component";
+import React, { useState, useEffect } from "react";
 
 const columns = [
   {
     name: "Name",
-    selector: (row) => row.name,
+    selector: (row) => row.Name,
   },
   {
     name: "Brand",
-    selector: (row) => row.brand,
+    selector: (row) => row.Brand,
   },
   {
     name: "Price",
-    selector: (row) => row.price,
+    selector: (row) => row.Price,
   },
   {
     name: "Amount in Stock",
-    selector: (row) => row.amount,
+    selector: (row) => row.AmountInStock,
   },
   {
     name: "Other remarks",
     cell: (row) => {
       const threshold = 10;
-      if (row.amount == 0) {
+      if (row.AmountInStock == 0) {
         return (
           <div>
             <i
@@ -35,7 +35,7 @@ const columns = [
         );
       }
 
-      if (row.amount < threshold) {
+      if (row.AmountInStock < threshold) {
         return (
           <div>
             <i
@@ -51,87 +51,97 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    id: 1,
-    name: "John Doe",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 300,
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 2,
-  },
-  {
-    id: 3,
-    name: "Robert Brown",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 50,
-  },
-  {
-    id: 4,
-    name: "Emily White",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 100,
-  },
-  {
-    id: 5,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 150,
-  },
-  {
-    id: 6,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 150,
-  },
-  {
-    id: 7,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 1,
-  },
-  {
-    id: 8,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 0,
-  },
-  {
-    id: 9,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 5,
-  },
-  {
-    id: 10,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 30,
-    amount: 150,
-  },
-  {
-    id: 11,
-    name: "Michael Green",
-    brand: "john.doe@example.com",
-    price: 20,
-    amount: 150,
-  },
-];
-
 function Food() {
+  const [foodData, showFoodLog] = useState([]);
+
+  const fetchFoodLog = async () => {
+    try {
+      const response = await fetch("/backend/fetch-foodtable", {
+        method: "GET",
+      });
+
+      const responseData = await response.json();
+      const formatedResponse = responseData.data.map((item) => ({
+        Name: item[1],
+        Brand: item[0],
+        Price: item[3],
+        AmountInStock: item[2],
+      }));
+      showFoodLog(formatedResponse);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchFoodLog();
+  }, []);
+
+  const [selectedOption, setSelectedOption] = useState(undefined);
+  const [name, setName] = useState(null);
+  const [brand, setBrand] = useState(null);
+  const [inputPrice, changePrice] = useState(foodData[0]?.Price || 0);
+  const [inputStock, changeStock] = useState(foodData[0]?.AmountInStock || 0);
+  const [successUpdate, changeUpdate] = useState(false);
+
+  const handleChange = (e) => {
+    setSelectedOption(e.target.value);
+
+    const selectedFood = foodData.find((food) => food.Name === e.target.value);
+    if (selectedFood) {
+      changePrice(selectedFood.Price);
+      changeStock(selectedFood.AmountInStock);
+      setName(selectedFood.Name);
+      setBrand(selectedFood.Brand);
+    }
+  };
+
+  const handlePrice = (e) => {
+    changePrice(e.target.value);
+  };
+
+  const handleStock = (e) => {
+    changeStock(e.target.value);
+  };
+
+  const clearData = () => {
+    setSelectedOption("");
+    setName("");
+    setBrand("");
+    changePrice("");
+    changeStock("");
+  };
+
+  const updateFood = async (event) => {
+    event.preventDefault();
+
+    const price = document.getElementById("inputPrice").value;
+    const amount = document.getElementById("inputStock").value;
+
+    const response = await fetch("/backend/update-food", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        price: parseFloat(price),
+        amount: parseInt(amount),
+        name: name,
+        brand: brand,
+      }),
+    });
+
+    const responseData = await response.json();
+    changeUpdate(responseData);
+    if (responseData.success) {
+      fetchFoodLog();
+      console.log("Success!");
+    } else {
+      console.log("error updating table");
+    }
+    clearData();
+  };
+
   return (
     <div className="Food">
       <div className="container-fluid">
@@ -139,12 +149,122 @@ function Food() {
           <div className="col-1"></div>
           <div className="col-9">
             <h1
-              className="heading fw-bold mt-5"
+              className="heading fw-bold mt-5 mb-3"
               style={{ color: "black", textAlign: "left" }}
             >
               Food Log
             </h1>
-            <DataTable columns={columns} data={data} pagination></DataTable>
+            <div className="text-start">
+              <button
+                type="button"
+                className="btn btn-lg custom-btn btn-block mt-3 mb-3"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                Update
+              </button>
+              {successUpdate && (
+                <i
+                  id="success"
+                  className="bi bi-check-circle ms-3"
+                  style={{ color: "black", fontSize: "16px" }}
+                >
+                  {" "}
+                  Successfully updated!
+                </i>
+              )}
+
+              <div
+                className="modal fade"
+                id="exampleModal"
+                tabIndex="-1"
+                aria-labelledby="exampleModalLabel"
+              >
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="mt-2" style={{ color: "black" }}>
+                        Select the name & brand to update
+                      </h5>
+                      <button
+                        type="button"
+                        className="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div className="modal-body">
+                      <select
+                        className="form-select mb-3"
+                        value={selectedOption}
+                        defaultValue=""
+                        onChange={handleChange}
+                      >
+                        <option value="" disabled>
+                          Select Brand - Name
+                        </option>
+                        {foodData.map((option, index) => (
+                          <option key={index} value={option.Name}>
+                            {option.Brand} - {option.Name}
+                          </option>
+                        ))}
+                      </select>
+                      <span>
+                        <p
+                          className=" ms-1"
+                          style={{
+                            color: "black",
+                            fontSize: "16px",
+                            display: "flex",
+                          }}
+                        >
+                          Price:{" "}
+                          <input
+                            id="inputPrice"
+                            type="number"
+                            step="any"
+                            className="form-control ms-3"
+                            value={inputPrice}
+                            onChange={handlePrice}
+                            min="0"
+                          ></input>
+                        </p>
+                      </span>
+                      <span>
+                        <p
+                          className=" ms-1"
+                          style={{
+                            color: "black",
+                            fontSize: "16px",
+                            display: "flex",
+                          }}
+                        >
+                          Amount in Stock:{" "}
+                          <input
+                            id="inputStock"
+                            type="integer"
+                            step="any"
+                            className="form-control ms-3"
+                            value={inputStock}
+                            onChange={handleStock}
+                            min="0"
+                          ></input>
+                        </p>
+                      </span>
+                      <button
+                        type="button"
+                        className="btn btn-lg custom-btn btn-block mt-4"
+                        data-bs-dismiss="modal"
+                        onClick={(event) => updateFood(event)}
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <DataTable columns={columns} data={foodData} pagination></DataTable>
           </div>
         </div>
       </div>
