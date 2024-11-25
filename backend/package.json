@@ -1,0 +1,16 @@
+{
+  "name": "node_demo_project",
+  "version": "1.0.0",
+  "description": "The sample Node.js project for CPSC304.",
+  "main": "server.js",
+  "keywords": [],
+  "author": {
+    "name": "Zoe Yuan"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "oracledb": "6.0"
+  }
+}

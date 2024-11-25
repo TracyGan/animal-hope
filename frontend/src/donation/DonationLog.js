@@ -5,7 +5,6 @@ const columns = [
   {
     name: "ID",
     selector: (row) => row.id,
-    maxWidth: "2px",
   },
   {
     name: "Name",
@@ -22,7 +21,6 @@ const columns = [
   {
     name: "Amount",
     selector: (row) => row.amount,
-    maxWidth: "2px",
   },
 ];
 

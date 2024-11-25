@@ -1,7 +1,37 @@
 import "./signin.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-function SignIn() {
+async function validateSignIn(event, setError) {
+  event.preventDefault();
+
+  const username = document.getElementById("inputUsername").value;
+  const password = document.getElementById("inputPassword").value;
+  console.log(username);
+
+  const response = await fetch("/backend/validate-signin", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username: username,
+      password: password,
+    }),
+  });
+
+  const responseData = await response.json();
+  if (responseData.success) {
+    setError(false);
+    console.log("Successfully entered");
+  } else {
+    console.log("Failed");
+    setError(true);
+  }
+}
+
+export default function SignIn() {
+  const [error, setError] = useState(false);
+
   return (
     <div className="SignIn">
       <div className="container">
@@ -19,23 +49,25 @@ function SignIn() {
                 <div className="col">
                   <form>
                     <div className="form-group">
-                      <label htmlFor="exampleInputUsername">Username</label>
+                      <label htmlFor="inputUsername">Username</label>
                       <input
                         type="username"
                         className="form-control"
-                        id="exampleInputUsername"
+                        id="inputUsername"
                       ></input>
                     </div>
                     <div className="form-group mt-3">
-                      <label htmlFor="exampleInputPassword1">Password</label>
+                      <label htmlFor="inputPassword">Password</label>
                       <input
                         type="password"
                         className="form-control"
-                        id="exampleInputPassword1"
+                        id="inputPassword"
                       ></input>
-                      <p className="error-msg mt-1">
-                        The password you entered is incorrect.{" "}
-                      </p>
+                      {error && (
+                        <p className="error-msg mt-1">
+                          The password you entered is incorrect.{" "}
+                        </p>
+                      )}
                     </div>
                   </form>
                 </div>
@@ -43,6 +75,7 @@ function SignIn() {
               <button
                 type="button"
                 className="btn btn-lg custom-btn btn-block mt-4"
+                onClick={(event) => validateSignIn(event, setError)}
               >
                 Sign In
               </button>
@@ -53,5 +86,3 @@ function SignIn() {
     </div>
   );
 }
-
-export default SignIn;
