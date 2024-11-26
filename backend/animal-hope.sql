@@ -4,7 +4,7 @@ DROP TABLE Walks;
 DROP TABLE Feed;
 DROP TABLE VetVisit;
 DROP TABLE TreatedBy;
--- DROP TABLE Client;
+DROP TABLE Client;
 -- DROP TABLE Fosters;
 -- DROP TABLE Adopts;
 -- DROP TABLE Makes;
@@ -101,13 +101,14 @@ CREATE TABLE TreatedBy(
     PRIMARY KEY (DateTime, Animal_ID)
 );
 
--- CREATE TABLE Client(
---     ID INTEGER PRIMARY KEY,
---     Name CHAR(20) NOT NULL,
---     EmailAddress VARCHAR NOT NULL,
---     FosterPersonCertificationID INTEGER UNIQUE,
---     AdopterPersonCertificationID INTEGER UNIQUE
--- );
+CREATE TABLE Client(
+    ID INTEGER PRIMARY KEY,
+    Name CHAR(20) NOT NULL,
+    EmailAddress VARCHAR(20) NOT NULL,
+    FosterPersonCertificationID INTEGER UNIQUE,
+    AdopterPersonCertificationID INTEGER UNIQUE
+);
+
 -- CREATE TABLE Fosters(
 --     Client_ID INTEGER,
 --     Animal_ID INTEGER,
@@ -191,4 +192,54 @@ VALUES ('NiallHoran', 'Nice2MeetYa', 'Niall Horan', 45000.0, 40, 2, NULL, NULL);
 INSERT INTO PaidStaff
 VALUES ('LiamPayne', 'LiamPayne111', 'Liam Payne', 150000.0, 50, NULL, NULL, 'University of London');
 
+
+-- AnimalTypes
+INSERT INTO AnimalTypes(Breed, Type) VALUES ('Golden Retriever', 'Dog'); 
+INSERT INTO AnimalTypes(Breed, Type) VALUES ('Corgi', 'Dog');
+INSERT INTO AnimalTypes(Breed, Type) VALUES ('Arabian', 'Horse');
+INSERT INTO AnimalTypes(Breed, Type) VALUES ('Siamese', 'Cat');
+INSERT INTO AnimalTypes(Breed, Type) VALUES ('Flemish Giant', 'Rabbit');
+INSERT INTO AnimalTypes(Breed, Type) VALUES ('Lionhead', 'Rabbit');
+INSERT INTO AnimalTypes(Breed, Type) VALUES ('Rottweiler', 'Dog');
+INSERT INTO AnimalTypes(Breed, Type) VALUES ('Tuxedo', 'Cat');
+
+-- Animal
+INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
+VALUES (4000, 'Max', TIMESTAMP '2020-10-12 15:30:21', 2, 'Corgi'); 
+
+INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
+VALUES (4001, 'Moose', TIMESTAMP '2010-10-12 10:20:18', 10, 'Arabian');
+
+INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
+VALUES (4002, 'Ruff', TIMESTAMP '2022-05-24 10:56:01', 2, 'Siamese');
+
+INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
+VALUES (4003, 'Meep', TIMESTAMP '2020-10-12 15:30:21', 1, 'Flemish Giant');
+
+INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
+VALUES (4004, 'Hensem', TIMESTAMP '2024-10-12 08:30:21', 4, 'Rottweiler');
+
+INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
+VALUES (4005, 'Runn', TIMESTAMP '2023-10-12 09:35:21', 2, 'Golden Retriever');
+
+INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
+VALUES (4006, 'Runn', TIMESTAMP '2023-10-12 09:35:21', 2, 'Arabian');
+
+-- Client
+INSERT INTO Client(ID, Name, EmailAddress, FosterPersonCertificationID, AdopterPersonCertificationID)
+VALUES (8000, 'Sam', 'sam2004@mail.com', 5831, 1234);
+
+INSERT INTO Client(ID, Name, EmailAddress, FosterPersonCertificationID, AdopterPersonCertificationID)
+VALUES (8001, 'Carly', 'icarly@mail.com', 1234, 3410);
+
+INSERT INTO Client(ID, Name, EmailAddress, FosterPersonCertificationID, AdopterPersonCertificationID)
+VALUES (8002, 'Cat', 'cat123@mail.com', 123, 9123);
+
+INSERT INTO Client(ID, Name, EmailAddress, FosterPersonCertificationID, AdopterPersonCertificationID)
+VALUES (8003, 'Tori', 'victorious@mail.com', 8391, 12);
+
+INSERT INTO Client(ID, Name, EmailAddress, FosterPersonCertificationID, AdopterPersonCertificationID)
+VALUES (8004, 'Jade', 'jade@mail.com', 2309, 1);
+
+Commit;
 

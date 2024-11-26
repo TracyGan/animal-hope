@@ -57,8 +57,11 @@
   }
 
   .profileButton {
+    position: relative;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 30px;
     background-color: rgb(196, 237, 255);
-    padding: 12px 6px 12px 12px;
     border-style: unset;
     border-color: rgb(151, 216, 244);
     border-radius: 10px;
@@ -81,4 +84,18 @@
     margin-top: 20px;
     width: 200px;
     height: 40px;
+  }
+
+  .topRDelete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 2px 4px;
+    width: 50px;
+    font-size: 10px;
+    color: #723434;
+    background-color: #fa9c9c;
+    border-color: #723434;
+    border-style: solid;
+    border-radius: 8px;
   }

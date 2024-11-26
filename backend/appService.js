@@ -85,6 +85,15 @@ async function fetchDemotableFromDb() {
   });
 }
 
+async function fetchAnimaltable() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT * FROM Animal A, AnimalTypes T WHERE A.Breed = T.Breed");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
 async function fetchFoodtable() {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(`SELECT * FROM Food`);
@@ -184,6 +193,15 @@ async function countDemotable() {
   });
 }
 
+async function deleteAnimal(id) {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("DELETE FROM Animal WHERE ID=:id", [id], { autoCommit: true });
+    return result; // # of rows deleted
+  }).catch(() => {
+    return 0; 
+  })
+}
+
 module.exports = {
   testOracleConnection,
   fetchDemotableFromDb,
@@ -194,4 +212,8 @@ module.exports = {
   validateSignIn,
   fetchFoodtable,
   updateFoodtable,
+  fetchAnimaltable,
+  deleteAnimal,
 };
+
+
