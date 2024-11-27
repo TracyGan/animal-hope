@@ -82,3 +82,13 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.listItem {
+    color: black;
+    text-align: left;
+    font-size: small;
+}
+
+.wholeList {
+    margin-top: 10px;
+}

@@ -8,13 +8,6 @@ import Modal from 'react-bootstrap/Modal';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { DropdownItem, DropdownMenu, DropdownToggle } from 'react-bootstrap';
 
-const groupRenderer = ({ group }) => {
-    return (
-        <div className="custom-group">
-            <span>{group.title}</span>
-        </div>
-    )
-}
 
 const ShiftsCalendar = () => {
     const [showCreateModal, setShowCreateModal] = useState({show: false, group: null, time: null, showLength: false, length: 1});
@@ -28,6 +21,15 @@ const ShiftsCalendar = () => {
     const [groups, setGroups] = useState([]);
     const [staff, setStaff] = useState([]);
     const [selectedPet, setSelectedPet] = useState({id: null, name: "Pet"});
+    const [walksPerVolunteer, setWalksPerVolunteer] = useState([]);
+
+    const groupRenderer = ({ group }) => {
+        return (
+            <div className="custom-group">
+                <span>{group.title}</span>
+            </div>
+        )
+    }
 
     const getPetNames = async () => {
         try {
@@ -182,6 +184,26 @@ const ShiftsCalendar = () => {
         }
     };
 
+    const handleCalc = async () => {
+        console.log("handleCalc pressed");
+        try {
+            const response = await fetch(`/backend/get-walks-per-volunteer`, {
+              method: "GET",
+            });
+            const data = await response.json();
+            
+            const transformedRows = data.data.map(row => ({
+                count: row[0],
+                name: row[1]
+            }));
+            setWalksPerVolunteer(transformedRows);
+            console.log(transformedRows);
+        } catch (e) {
+            console.error(e);
+            return 0;
+        }
+    }
+
     const getFormattedTime = () => {
         const date = new Date(showCreateModal.time);
         const formattedDate = `${date.getFullYear()}-${
@@ -325,6 +347,9 @@ const ShiftsCalendar = () => {
             <h2 className='shifts-title'>
                 Shifts
             </h2>
+            <Button onClick={() => handleCalc()}>
+                Calculate # of Walks For Each Volunteer
+            </Button>
         </div>
         <Timeline
             groups={groups}
@@ -366,6 +391,19 @@ const ShiftsCalendar = () => {
                 />
             </TimelineHeaders>
         </Timeline>
+        {walksPerVolunteer.length > 0 &&
+            <div className='wholeList'>
+            <p className='listItem'>
+                Walks Per Volunteer:
+            </p>
+            {walksPerVolunteer.map((walkData, index) => (
+                <div key={index} >
+                    <p className="listItem">{walkData.name} : {walkData.count}</p>
+                </div>
+            ))}
+        </div>
+        }
+        
         </div>
     );
 }
