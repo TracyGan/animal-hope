@@ -1,0 +1,84 @@
+.rct-calendar-header {
+    color: black;
+}
+
+.rct-dateHeader.rct-dateHeader-primary {
+    color: black;
+}
+
+.rct-sidebar {
+    color: black;
+}
+.react-calendar-timeline .rct-horizontal-lines .rct-hl-even, 
+.react-calendar-timeline .rct-horizontal-lines .rct-hl-odd, 
+.react-calendar-timeline .rct-sidebar .rct-sidebar-row {
+    border-bottom:0;
+}
+
+
+.sticky {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+}
+
+.shifts-title {
+    margin:0;
+    margin-left: 10px;
+    color: black;
+    text-align: left;
+}
+
+.shifts-whole-thing {
+    margin-left: 50px;
+    margin-top: 25px;
+}
+
+.custom-group {
+    font-size: small;
+}
+
+.react-calendar-timeline .rct-dateHeader {
+    border-left: 0px;
+    border-bottom: 0px;
+}
+
+.shifts-header {
+    display: flex;
+    justify-content: space-between; 
+    margin-right: 25px;
+    margin-bottom: 10px;
+}
+
+.add-button {
+    height: 35px;
+    width: 35px;
+    border: 0;
+    border-radius: 50%;
+    font-size: smaller;
+    background-color: #bbb;
+    color: white;
+}
+
+.add-button:hover {
+    background-color: #6d6d6d;
+}
+
+
+
+.react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
+    background-color: rgba(0, 0, 0, 0.05);
+}  
+
+.react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-6, .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-0 {
+    background: rgba(250, 246, 225, 0.0);
+}
+
+.modal {
+    z-index: 300;
+}
+
+.dropDown {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

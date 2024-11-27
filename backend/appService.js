@@ -184,6 +184,85 @@ async function countDemotable() {
   });
 }
 
+async function getPetNames() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT ID, Name FROM Animal");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function getPaidStaff() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT UserName, Name, TrainingID, University FROM PaidStaff WHERE OfficeNumber IS NULL");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function getVolunteers() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT * FROM Volunteer");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function getWalks() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      'SELECT w.ID AS Walk_ID, w.Animal_ID, a.Name AS Animal_Name, w.Volunteer_ID, w.Duration, w.DateTime FROM Walks w JOIN Animal a ON w.Animal_ID = a.ID');
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function getFeeds() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT f.ID, f.Animal_ID, a.Name, f.PaidStaff_Username, f.DateTime FROM Feed f JOIN Animal a ON f.Animal_ID = a.ID");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function getTreats() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT v.ID, t.Animal_ID, a.Name, t.PaidStaff_Username, t.DateTime FROM TreatedBy t JOIN VetVisit v ON (t.Animal_ID = v.Animal_ID AND t.DateTime = v.DateTime) JOIN Animal a ON t.Animal_ID = a.ID");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function getMaxWalkID() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute('SELECT MAX(ID) FROM Walks');
+    console.log(result);
+    return result.rows[0][0];
+  }).catch(() => {
+    return 0;
+  });
+}
+
+async function insertWalks(id, animalID, volunteerID, duration, dateTime) {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `INSERT INTO Walks (ID, Animal_ID, Volunteer_ID, Duration, DateTime) 
+       VALUES (:1, :2, :3, :4, TO_DATE(:5, 'YYYY-MM-DD HH24:MI:SS'))`,
+      [id, animalID, volunteerID, duration, dateTime],
+      { autoCommit: true }
+    );
+    return result.rowsAffected && result.rowsAffected > 0;
+  }).catch(() => {
+    return false;
+  });
+}
+
 module.exports = {
   testOracleConnection,
   fetchDemotableFromDb,
@@ -194,4 +273,12 @@ module.exports = {
   validateSignIn,
   fetchFoodtable,
   updateFoodtable,
+  getPetNames, 
+  getPaidStaff,
+  getVolunteers,
+  getWalks, 
+  getFeeds,
+  getTreats,
+  insertWalks,
+  getMaxWalkID
 };
