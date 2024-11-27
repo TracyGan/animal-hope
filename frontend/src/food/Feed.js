@@ -107,9 +107,10 @@ function Feed() {
     const responseData = await response.json();
     if (responseData.success) {
       fetchFeedLog();
+      alert("Successfully updated Feed table!");
       console.log("Success!");
     } else {
-      console.log("error updating table");
+      alert("error updating Feed table");
     }
     clearData();
   };
