@@ -351,6 +351,16 @@ async function insertWalks(id, animalID, volunteerID, duration, dateTime) {
   });
 }
 
+async function getWalksPerVolunteer() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute('SELECT COUNT(w.ID), v.Name FROM Walks w INNER JOIN Volunteer v ON v.ID = w.Volunteer_ID GROUP BY v.Name');
+    console.log(result);
+    return result.rows;
+  }).catch(() => {
+    return 0;
+  });
+}
+
 module.exports = {
   testOracleConnection,
   fetchDemotableFromDb,
@@ -375,4 +385,5 @@ module.exports = {
   fetchFeaturesFeed,
   calculateAverageDonation,
   nestedAgg,
+  getWalksPerVolunteer
 };

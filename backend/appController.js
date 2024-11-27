@@ -181,4 +181,9 @@ router.post("/insert-walks", async (req, res) => {
   }
 });
 
+router.get("/get-walks-per-volunteer", async (req, res) => {
+  const result = await appService.getWalksPerVolunteer();
+  res.json({ data: result });
+});
+
 module.exports = router;
