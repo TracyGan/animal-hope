@@ -114,17 +114,6 @@ async function fetchFeedtable() {
   });
 }
 
-async function fetchDonationtable(selection, order) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `SELECT * FROM Donation JOIN Client ON Client.ID=Donation.Client_ID ORDER BY ${selection} ${order}`
-    );
-    return result.rows;
-  }).catch(() => {
-    return [];
-  });
-}
-
 async function initiateDemotable() {
   return await withOracleDB(async (connection) => {
     try {
@@ -173,6 +162,47 @@ async function insertDemotable(id, name) {
   });
 }
 
+async function fetchDonationtable(selection, order, condition) {
+  return await withOracleDB(async (connection) => {
+    let query = `SELECT * FROM Donation JOIN Client ON Client.ID=Donation.Client_ID ORDER BY ${selection} ${order}`;
+
+    if (condition == "Foster") {
+      console.log("in foster");
+      query = `SELECT * FROM Donation 
+      JOIN Client ON Client.ID=Donation.Client_ID 
+      WHERE Client.AdopterPersonCertificationID IS NULL 
+        AND Client.FosterPersonCertificationID IS NOT NULL
+      ORDER BY ${selection} ${order}`;
+    } else if (condition == "Adopter") {
+      query = `SELECT * FROM Donation 
+      JOIN Client ON Client.ID=Donation.Client_ID 
+      WHERE Client.FosterPersonCertificationID IS NULL 
+        AND Client.AdopterPersonCertificationID IS NOT NULL 
+      ORDER BY ${selection} ${order}`;
+    }
+    const result = await connection.execute(query);
+
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function nestedAgg() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(`
+      SELECT Client.ID, Client.Name, Client.EmailAddress, SUM(D.Amount), Client.FosterPersonCertificationID, Client.AdopterPersonCertificationID
+      FROM Donation D
+      JOIN Client ON Client.ID = D.Client_ID
+      GROUP BY Client.ID, Client.Name, Client.EmailAddress, Client.FosterPersonCertificationID, Client.AdopterPersonCertificationID
+      HAVING SUM(D.Amount) > (SELECT AVG(d1.amount) FROM Donation d1)
+    `);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
 async function updateFeedtable(id, feature, value) {
   return await withOracleDB(async (connection) => {
     let query = `UPDATE Feed SET ${feature} =: value WHERE ID =: id`;
@@ -204,6 +234,16 @@ async function updateFoodtable(price, amount, name, brand) {
     );
     // return true;
     return result.rowsAffected && result.rowsAffected > 0;
+  }).catch(() => {
+    return false;
+  });
+}
+
+async function calculateAverageDonation() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(`SELECT AVG(Amount) FROM Donation`);
+    console.log(result.rows[0]);
+    return result.rows[0];
   }).catch(() => {
     return false;
   });
@@ -246,4 +286,6 @@ module.exports = {
   fetchFeedtable,
   updateFeedtable,
   fetchFeaturesFeed,
+  calculateAverageDonation,
+  nestedAgg,
 };

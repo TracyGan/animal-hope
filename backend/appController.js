@@ -50,9 +50,23 @@ router.get("/fetch-feedtable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
+router.get("/nested-agg", async (req, res) => {
+  const tableContent = await appService.nestedAgg();
+  res.json({ data: tableContent });
+});
+
+router.get("/calculate-averageDonation", async (req, res) => {
+  const tableContent = await appService.calculateAverageDonation();
+  res.json({ data: tableContent });
+});
+
 router.get("/fetch-donationtable", async (req, res) => {
-  const { selection = "DonationDate", order = "DESC" } = req.query;
-  const tableContent = await appService.fetchDonationtable(selection, order);
+  const { selection = "DonationDate", order = "DESC", condition } = req.query;
+  const tableContent = await appService.fetchDonationtable(
+    selection,
+    order,
+    condition
+  );
   res.json({ data: tableContent });
 });
 
