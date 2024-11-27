@@ -45,6 +45,33 @@ router.get("/fetch-foodtable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
+router.get("/fetch-feedtable", async (req, res) => {
+  const tableContent = await appService.fetchFeedtable();
+  res.json({ data: tableContent });
+});
+
+router.get("/fetch-donationtable", async (req, res) => {
+  const { selection = "DonationDate", order = "DESC" } = req.query;
+  const tableContent = await appService.fetchDonationtable(selection, order);
+  res.json({ data: tableContent });
+});
+
+router.get("/fetch-featuresFeed", async (req, res) => {
+  const { selection, table } = req.query;
+  const tableContent = await appService.fetchFeaturesFeed(selection, table);
+  res.json({ data: tableContent });
+});
+
+router.post("/update-feed", async (req, res) => {
+  const { id, feature, value } = req.body;
+  const updateResult = await appService.updateFeedtable(id, feature, value);
+  if (updateResult) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ success: false });
+  }
+});
+
 router.post("/update-food", async (req, res) => {
   const { price, amount, name, brand } = req.body;
   const updateResult = await appService.updateFoodtable(
