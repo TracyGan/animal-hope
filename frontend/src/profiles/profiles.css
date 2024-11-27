@@ -3,6 +3,8 @@
     flex-direction: row;
     margin: 0 auto;
     width: 100%;
+    justify-content: center;
+    align-content: center;
 }
   
   .column {
@@ -27,10 +29,20 @@
     padding-inline: 20px;
   }
 
-  .addButton {
-    margin: 0 auto;
+  .projNotSelected {
+    margin: 10px;
     padding: 2px 4px;
-    width: 130px;
+    font-size: 15px;
+    color: rgb(103, 105, 103);
+    background-color: rgb(255, 255, 255);
+    border-color: rgb(103, 105, 103);
+    border-style: solid;
+    border-radius: 8px;
+  }
+
+  .projSelected {
+    margin: 10px;
+    padding: 2px 4px;
     font-size: 15px;
     color: rgb(88, 141, 85);
     background-color: rgb(211, 254, 208);
@@ -67,6 +79,18 @@
     border-radius: 10px;
     font-size: 15px;
     width: 400px;
+  }
+
+  .clientProfileButton {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 20px;
+    background-color: rgb(246, 255, 196);
+    border-style: unset;
+    border-color: rgb(151, 216, 244);
+    border-radius: 10px;
+    font-size: 15px;
+    width: 325px;
   }
 
   .animalImg {

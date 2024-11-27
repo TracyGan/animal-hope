@@ -18,8 +18,8 @@ function App() {
         {/* <SignIn></SignIn> */}
         {/* <DonationLog></DonationLog> */}
         {/* <Food></Food> */}
-        {/* {<ClientProfiles></ClientProfiles>} */}
-        {<AnimalProfiles></AnimalProfiles>}
+        {<ClientProfiles></ClientProfiles>}
+        {/* {<AnimalProfiles></AnimalProfiles>} */}
       </header>
     </div>
   );

@@ -85,6 +85,15 @@ async function fetchDemotableFromDb() {
   });
 }
 
+async function fetchClienttable() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT * FROM Client");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
 async function fetchAnimaltable() {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute("SELECT * FROM Animal A, AnimalTypes T WHERE A.Breed = T.Breed");
@@ -214,6 +223,7 @@ module.exports = {
   updateFoodtable,
   fetchAnimaltable,
   deleteAnimal,
+  fetchClienttable,
 };
 
 

@@ -21,8 +21,6 @@ export default function AnimalProfiles() {
             method: "GET",
           });
           const responseData = await response.json();
-          console.log("I AM FINISHED FETCHING THE DATA!");
-          console.log(responseData.data);
           const animalsAsObjects = responseData.data.map((a) => (
             {
                 ID : a[0],
