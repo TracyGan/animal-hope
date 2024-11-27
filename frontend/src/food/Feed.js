@@ -1,6 +1,7 @@
 import DataTable from "react-data-table-component";
 import React, { useState, useEffect } from "react";
 import moment from "moment";
+import sanitization from "../sanitization";
 
 const columns = [
   {
@@ -91,6 +92,7 @@ function Feed() {
   const updateChanges = async (e) => {
     e.preventDefault();
     let formattedValue = inputChange;
+    sanitization(formattedValue);
     const response = await fetch("/backend/update-feed", {
       method: "POST",
       headers: {
