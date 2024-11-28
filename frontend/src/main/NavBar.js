@@ -1,11 +1,13 @@
+import { NavLink } from "react-router-dom";
 import "./navbar.css"
 export default function NavBar() {
   return <div className="navBox">
-    <a href="/food">Food</a>
-    <a href="/feed">Feed</a>
-    <a href="/animals">Animals</a>
-    <a href="/clients">Clients</a>
-    <a href="/shifts">Shifts</a>
-    <a href="/donations">Donations</a>
+    <NavLink to="/food">Food</NavLink>
+
+    <NavLink to="/feed">Feed</NavLink>
+    <NavLink to="/animals">Animals</NavLink>
+    <NavLink to="/clients">Clients</NavLink>
+    <NavLink to="/shifts">Shifts</NavLink>
+    <NavLink to="/donations">Donations</NavLink>
   </div>;
 }

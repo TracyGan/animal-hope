@@ -1,15 +1,15 @@
-DROP TABLE Appointment;
 DROP TABLE AnimalTypes;
 DROP TABLE Walks;
 DROP TABLE Feed;
 DROP TABLE VetVisit;
 DROP TABLE TreatedBy;
+DROP TABLE Fosters;
+DROP TABLE Adopts;
+DROP TABLE Makes;
+DROP TABLE Appointment;
+DROP TABLE Donation;
 DROP TABLE Client;
--- DROP TABLE Fosters;
--- DROP TABLE Adopts;
--- DROP TABLE Makes;
 DROP TABLE Orders;
--- DROP TABLE Donation;
 DROP TABLE Animal;
 DROP TABLE Food;
 DROP TABLE Volunteer;
@@ -26,7 +26,7 @@ CREATE TABLE Food(
     Name VARCHAR2(80),
     AmountInStock INTEGER NOT NULL,
     Price FLOAT NOT NULL,
-    PRIMARY KEY(Brand, Name)
+    PRIMARY KEY(Name)
 );
 
 CREATE TABLE Appointment(
@@ -82,7 +82,7 @@ CREATE TABLE Feed(
     DateTime TIMESTAMP NOT NULL,
     FOREIGN KEY(Animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE,
     FOREIGN KEY(PaidStaff_Username) REFERENCES PaidStaff(Username) ON DELETE CASCADE,
-    FOREIGN KEY(Food_Brand, Food_Name) REFERENCES Food(Brand, Name) ON DELETE CASCADE
+    FOREIGN KEY(Food_Name) REFERENCES Food(Name) ON DELETE CASCADE
 );
 
 CREATE TABLE VetVisit(
@@ -103,60 +103,60 @@ CREATE TABLE TreatedBy(
 
 CREATE TABLE Client(
     ID INTEGER PRIMARY KEY,
-    Name CHAR(20) NOT NULL,
-    EmailAddress VARCHAR(20) NOT NULL,
+    Name VARCHAR(20) NOT NULL,
+    EmailAddress VARCHAR2(80) NOT NULL,
     FosterPersonCertificationID INTEGER UNIQUE,
     AdopterPersonCertificationID INTEGER UNIQUE
 );
 
--- CREATE TABLE Fosters(
---     Client_ID INTEGER,
---     Animal_ID INTEGER,
---     StartDate DATE NOT NULL,
---     EndDate DATE,
---     PRIMARY KEY(Client_ID, Animal_ID),
---     FOREIGN KEY(Client_ID) REFERENCES Client(ID) ON DELETE CASCADE,
---     FOREIGN KEY(Animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE
--- );
+CREATE TABLE Fosters(
+    Client_ID INTEGER,
+    Animal_ID INTEGER,
+    StartDate TIMESTAMP NOT NULL,
+    EndDate DATE,
+    PRIMARY KEY(Client_ID, Animal_ID),
+    FOREIGN KEY(Client_ID) REFERENCES Client(ID) ON DELETE CASCADE,
+    FOREIGN KEY(Animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE
+);
 
--- CREATE TABLE Adopts(
---     Client_ID INTEGER,
---     Animal_ID INTEGER,
---     AdoptionDate DATE NOT NULL,
---     Fee FLOAT NOT NULL,
---     PRIMARY KEY(Client_ID, Animal_ID),
---     FOREIGN KEY(Client_ID) REFERENCES Client(ID) ON DELETE CASCADE,
---     FOREIGN KEY(Animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE
--- );
------- 
+CREATE TABLE Adopts(
+    Client_ID INTEGER,
+    Animal_ID INTEGER,
+    AdoptionDate TIMESTAMP NOT NULL,
+    Fee FLOAT NOT NULL,
+    PRIMARY KEY(Client_ID, Animal_ID),
+    FOREIGN KEY(Client_ID) REFERENCES Client(ID) ON DELETE CASCADE,
+    FOREIGN KEY(Animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE
+);
+---- 
 
--- CREATE TABLE Makes(
---     Appointment_ID INTEGER,
---     PaidStaff_Username INTEGER,
---     Client_ID INTEGER,
---     FOREIGN KEY (Appointment_ID) REFERENCES Appointment(ID) ON DELETE CASCADE,
---     FOREIGN KEY (Client_ID) REFERENCES Client(ID) ON DELETE CASCADE,
---     PRIMARY KEY(Appointment_ID, PaidStaff_Username, Client_ID)
--- );
+CREATE TABLE Makes(
+    Appointment_ID INTEGER,
+    PaidStaff_Username INTEGER,
+    Client_ID INTEGER,
+    FOREIGN KEY (Appointment_ID) REFERENCES Appointment(ID) ON DELETE CASCADE,
+    FOREIGN KEY (Client_ID) REFERENCES Client(ID) ON DELETE CASCADE,
+    PRIMARY KEY(Appointment_ID, PaidStaff_Username, Client_ID)
+);
 
 CREATE TABLE Orders(
     Food_Brand VARCHAR2(20),
     Food_Name VARCHAR2(80),
     PaidStaff_Username VARCHAR2(20),
     DateTime TIMESTAMP NOT NULL,
-    FOREIGN KEY (Food_Brand, Food_Name) REFERENCES Food(Brand, Name) ON DELETE CASCADE,
+    FOREIGN KEY (Food_Name) REFERENCES Food(Name) ON DELETE CASCADE,
     FOREIGN KEY (PaidStaff_Username) REFERENCES PaidStaff(Username) ON DELETE CASCADE,
     PRIMARY KEY(Food_Brand, Food_Name, PaidStaff_Username)
 );
 
+CREATE TABLE Donation(
+    ID INTEGER PRIMARY KEY,
+    DonationDate DATE NOT NULL,
+    Amount FLOAT NOT NULL,
+    Client_ID INTEGER,
+    FOREIGN KEY(Client_ID) REFERENCES Client(ID)
+);
 
--- CREATE TABLE Donation(
---     ID INTEGER PRIMARY KEY,
---     Date DATE NOT NULL,
---     Amount FLOAT NOT NULL,
---     Client_ID INTEGER,
---     FOREIGN KEY(Client_ID) REFERENCES Client(ID)
--- );
 
 
 -- Food
@@ -175,6 +175,47 @@ VALUES ('ADM Animal Nutrition', 'Pen Pals Rabbit Feed', 1, 45.0);
 INSERT INTO Food
 VALUES ('Purina', 'Layena Crumbles', 2, 20.0);
 
+-- AnimalTypes
+INSERT INTO AnimalTypes
+VALUES ('Golden Retriever', 'Dog');
+
+INSERT INTO AnimalTypes
+VALUES ('Corgi', 'Dog');
+
+INSERT INTO AnimalTypes
+VALUES ('Arabian', 'Horse');
+
+INSERT INTO AnimalTypes
+VALUES ('Siamese', 'Cat');
+
+INSERT INTO AnimalTypes
+VALUES ('Flemish Giant', 'Rabbit');
+
+INSERT INTO AnimalTypes
+VALUES ('Rottweiler', 'Dog');
+
+-- Animal
+INSERT INTO Animal
+VALUES (4000, 'Max', TO_DATE('2024-10-16 10:30:00', 'yyyy-MM-dd HH24:MI:SS'), 2, 'Corgi');
+
+INSERT INTO Animal
+VALUES (4001, 'Moose', TO_DATE('2010-10-12 19:45:00', 'yyyy-MM-dd HH24:MI:SS'), 10, 'Arabian');
+
+INSERT INTO Animal
+VALUES (4002, 'Ruff', TO_DATE('2022-05-24 10:56:01', 'yyyy-MM-dd HH24:MI:SS'), 2, 'Siamese');
+
+INSERT INTO Animal
+VALUES (4003, 'Meep', TO_DATE('2020-10-12 15:30:21', 'yyyy-MM-dd HH24:MI:SS'), 1, 'Flemish Giant');
+
+INSERT INTO Animal
+VALUES (4004, 'Hensem', TO_DATE('2024-10-12 08:30:21', 'yyyy-MM-dd HH24:MI:SS'), 4, 'Rottweiler');
+
+INSERT INTO Animal
+VALUES (4005, 'Runn', TO_DATE('2023-10-12 09:35:21','yyyy-MM-dd HH24:MI:SS'),  2, 'Golden Retriever');
+
+INSERT INTO Animal
+VALUES (4006, 'Runn', TO_DATE('2023-10-12 09:35:21','yyyy-MM-dd HH24:MI:SS'), 2, 'Arabian');
+
 
 -- PaidStaff
 INSERT INTO PaidStaff
@@ -192,22 +233,85 @@ VALUES ('NiallHoran', 'Nice2MeetYa', 'Niall Horan', 45000.0, 40, 2, NULL, NULL);
 INSERT INTO PaidStaff
 VALUES ('LiamPayne', 'LiamPayne111', 'Liam Payne', 150000.0, 50, NULL, NULL, 'University of London');
 
+-- Client
+INSERT INTO Client
+VALUES (8000, 'Sam', 'sam2004@mail.com', 5831, NULL);
+
+INSERT INTO Client
+VALUES (8001, 'Carly', 'icarly@mail.com', NULL, 3410);
+
+INSERT INTO Client
+VALUES (8002, 'Cat', 'cat123@mail.com', NULL, 9123);
+
+INSERT INTO Client
+VALUES (8003, 'Tori', 'victorious@mail.com', 8391, NULL);
+
+INSERT INTO Client
+VALUES (8004, 'Jade', 'jade@mail.com', 2309, 3212);
+
+-- Feed
+INSERT INTO Feed
+VALUES (6000, 4002, 'HarryStyles', 'Purina', 'Pro Plan Live Clear', TO_TIMESTAMP('2024-10-13 10:30:00', 'yyyy-MM-dd HH24:MI:SS'));
+
+INSERT INTO Feed
+VALUES (6001, 4006, 'HarryStyles', 'Nutrena', 'SafeChoice Original Horse Feed', TO_TIMESTAMP('2024-09-29 19:45:00', 'yyyy-MM-dd HH24:MI:SS'));
+
+INSERT INTO Feed
+VALUES (6002, 4003, 'HarryStyles', 'ADM Animal Nutrition', 'Pen Pals Rabbit Feed', TO_TIMESTAMP('2024-02-29 09:15:00', 'yyyy-MM-dd HH24:MI:SS'));
+
+INSERT INTO Feed
+VALUES (6003, 4005, 'HarryStyles', 'Purina', 'Layena Crumbles', TO_TIMESTAMP('2023-11-28 12:45:00', 'yyyy-MM-dd HH24:MI:SS'));
+
+INSERT INTO Feed
+VALUES (6004, 4005, 'HarryStyles', 'Royal Canin', 'Feline Health Nutrition Indoor', TO_TIMESTAMP('2022-07-08 08:30:00', 'yyyy-MM-dd HH24:MI:SS'));
+
+
+-- Donation
+INSERT INTO Donation
+VALUES (1300, TO_DATE('2024-10-16', 'yyyy-MM-dd'), 1000.0, 8001);
+
+INSERT INTO Donation
+VALUES (1301, TO_DATE('2024-10-23', 'yyyy-MM-dd'), 150.0, 8002);
+
+INSERT INTO Donation
+VALUES (1302, TO_DATE('2024-10-03', 'yyyy-MM-dd'), 10.5, 8003);
+
+INSERT INTO Donation
+VALUES (1303, TO_DATE('2024-11-24', 'yyyy-MM-dd'), 503.2, 8004);
+
+INSERT INTO Donation
+VALUES (1304, TO_DATE('2024-11-21', 'yyyy-MM-dd'), 500.0, 8002);
+
+INSERT INTO Donation
+VALUES (1305, TO_DATE('2024-11-24', 'yyyy-MM-dd'), 500.0, 8002);
+
+INSERT INTO Donation
+VALUES (1306, TO_DATE('2024-09-20', 'yyyy-MM-dd'), 2000, 8003);
 
 -- AnimalTypes
-INSERT INTO AnimalTypes(Breed, Type) VALUES ('Golden Retriever', 'Dog'); 
-INSERT INTO AnimalTypes(Breed, Type) VALUES ('Corgi', 'Dog');
-INSERT INTO AnimalTypes(Breed, Type) VALUES ('Arabian', 'Horse');
-INSERT INTO AnimalTypes(Breed, Type) VALUES ('Siamese', 'Cat');
-INSERT INTO AnimalTypes(Breed, Type) VALUES ('Flemish Giant', 'Rabbit');
-INSERT INTO AnimalTypes(Breed, Type) VALUES ('Lionhead', 'Rabbit');
-INSERT INTO AnimalTypes(Breed, Type) VALUES ('Rottweiler', 'Dog');
-INSERT INTO AnimalTypes(Breed, Type) VALUES ('Tuxedo', 'Cat');
+INSERT INTO AnimalTypes(Breed, Type)
+VALUES ('Golden Retriever', 'Dog');
+
+INSERT INTO AnimalTypes(Breed, Type)
+VALUES ('Corgi', 'Dog');
+
+INSERT INTO AnimalTypes(Breed, Type)
+VALUES ('Arabian', 'Horse');
+
+INSERT INTO AnimalTypes(Breed, Type)
+VALUES ('Siamese', 'Cat');
+
+INSERT INTO AnimalTypes(Breed, Type)
+VALUES ('Flemish Giant', 'Rabbit');
+
+INSERT INTO AnimalTypes(Breed, Type)
+VALUES ('Rottweiler', 'Dog');
 
 -- Animal
 INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
-VALUES (4000, 'Max', TIMESTAMP '2020-10-12 15:30:21', 2, 'Corgi'); 
+VALUES (4000, 'Max', TIMESTAMP '2020-10-12 15:30:21', 2, 'Corgi');
 
-INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
+INSERT INTO Animal (ID, Name, ArrivalDate, Age, Breed)
 VALUES (4001, 'Moose', TIMESTAMP '2010-10-12 10:20:18', 10, 'Arabian');
 
 INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
@@ -224,22 +328,6 @@ VALUES (4005, 'Runn', TIMESTAMP '2023-10-12 09:35:21', 2, 'Golden Retriever');
 
 INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
 VALUES (4006, 'Runn', TIMESTAMP '2023-10-12 09:35:21', 2, 'Arabian');
-
--- Client
-INSERT INTO Client(ID, Name, EmailAddress, FosterPersonCertificationID, AdopterPersonCertificationID)
-VALUES (8000, 'Sam', 'sam2004@mail.com', 5831, 1234);
-
-INSERT INTO Client(ID, Name, EmailAddress, FosterPersonCertificationID, AdopterPersonCertificationID)
-VALUES (8001, 'Carly', 'icarly@mail.com', 1234, 3410);
-
-INSERT INTO Client(ID, Name, EmailAddress, FosterPersonCertificationID, AdopterPersonCertificationID)
-VALUES (8002, 'Cat', 'cat123@mail.com', 123, 9123);
-
-INSERT INTO Client(ID, Name, EmailAddress, FosterPersonCertificationID, AdopterPersonCertificationID)
-VALUES (8003, 'Tori', 'victorious@mail.com', 8391, 12);
-
-INSERT INTO Client(ID, Name, EmailAddress, FosterPersonCertificationID, AdopterPersonCertificationID)
-VALUES (8004, 'Jade', 'jade@mail.com', 2309, 1);
 
 -- Volunteer
 INSERT INTO Volunteer(ID, Name)
@@ -262,56 +350,16 @@ INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
 VALUES (5000, 4000, 100, 1.5, TIMESTAMP '2024-10-12 15:30:21');
 
 INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5001, 4001, 101, 1, TIMESTAMP '2024-11-30 14:20:34');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
 VALUES (5002, 4004, 102, 0.5, TIMESTAMP '2024-09-18 13:59:19');
 
 INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5003, 4001, 101, NULL, TIMESTAMP '2024-07-01 12:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
 VALUES (5004, 4004, 104, 2.5, TIMESTAMP '2024-04-25 11:31:01');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5003, 4000, 101, NULL, TIMESTAMP '2024-07-01 12:24:42');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5005, 4001, 101, NULL, TIMESTAMP '2024-07-01 12:24:42');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5006, 4002, 101, NULL, TIMESTAMP '2024-07-01 13:24:42');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5007, 4003, 101, NULL, TIMESTAMP '2024-07-01 14:24:42');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5008, 4004, 101, NULL, TIMESTAMP '2024-07-01 15:24:42');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5009, 4005, 101, NULL, TIMESTAMP '2024-07-01 16:24:42');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5010, 4006, 101, NULL, TIMESTAMP '2024-07-01 17:24:42');
-
---
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5013, 4000, 102, NULL, TIMESTAMP '2024-08-01 12:24:42');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5015, 4001, 102, NULL, TIMESTAMP '2024-08-01 12:24:42');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5016, 4002, 102, NULL, TIMESTAMP '2024-08-01 13:24:42');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5017, 4003, 102, NULL, TIMESTAMP '2024-08-01 14:24:42');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5018, 4004, 102, NULL, TIMESTAMP '2024-08-01 15:24:42');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5019, 4005, 102, NULL, TIMESTAMP '2024-08-01 16:24:42');
-
-INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
-VALUES (5020, 4006, 102, NULL, TIMESTAMP '2024-08-01 17:24:42');
-
-
-
 
 -- Feed
 INSERT INTO Feed(ID, Animal_ID, PaidStaff_Username, Food_Brand, Food_Name, DateTime)
@@ -345,7 +393,9 @@ VALUES (7003, 4000, TIMESTAMP '2023-11-28 12:45:00');
 INSERT INTO VetVisit(ID, Animal_ID, DateTime)
 VALUES (7004, 4004, TIMESTAMP '2022-12-25 09:30:00');
 
+
 -- TreatedBy
+
 INSERT INTO TreatedBy(Animal_ID, PaidStaff_Username, DateTime)
 VALUES (4001, 'LiamPayne', TIMESTAMP '2023-10-13 10:30:00');
 
@@ -362,4 +412,3 @@ INSERT INTO TreatedBy(Animal_ID, PaidStaff_Username, DateTime)
 VALUES (4004, 'LiamPayne', TIMESTAMP '2022-12-25 09:30:00');
 
 Commit;
-
