@@ -72,6 +72,7 @@ export default function AnimalProfiles() {
               },
             body: JSON.stringify({animalID : id})
         });
+        console.log("deleted " + response + " item(s)")
         await fetchData();
     }
     
@@ -91,11 +92,10 @@ export default function AnimalProfiles() {
         )
     }
 
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
     function DivisionButton() {
+        const [open, setOpen] = useState(false);
+        const handleOpen = () => setOpen(true);
+        const handleClose = () => setOpen(false);
         const [volunteers, setVolunteers] = useState([]);
         async function getVolunteers() {
             const response = await fetch("/backend/fetch-division", {
@@ -106,17 +106,46 @@ export default function AnimalProfiles() {
         }
         useEffect(() => {getVolunteers()}, []);
         return (
-            <div>
+            <>
         <button className="projSelected" onClick={handleOpen}>Friends of the Animals!</button>
 
       <Modal open={open} onClose={handleClose}>
-        <div className="division"> 
+        <div className="popUp"> 
             <p>These volunteers have walked every animal:</p> 
             <p>{volunteers.length > 0 ? `${volunteers.map((v) => v[0]).join(', ')}` : "No one has walked every animal..."}</p>
             </div>
         
       </Modal>
-    </div>
+    </>
+        )
+    }
+
+    function GroupByHavingButton() {
+        const [open, setOpen] = useState(false);
+        const handleOpen = () => setOpen(true);
+        const handleClose = () => setOpen(false);
+        const [priority, setPriority] = useState([]);
+
+        async function getPriority() {
+            const response = await fetch("/backend/fetch-group-by-having", {
+                method: "GET",
+              });
+              const responseData = await response.json();
+              setPriority(responseData.data);    
+        }
+        useEffect(() => {getPriority()}, []);
+        return (
+            <>
+        <button className="projSelected" onClick={handleOpen}>Priority Breeds</button>
+
+      <Modal open={open} onClose={handleClose}>
+        <div className="popUp"> 
+            <p>These breeds have an average age greater than the average age of our animals:</p> 
+            {priority.map((p) => <p>{p[0] + " - Average Age: " + p[1]}</p>)}
+            </div>
+        
+      </Modal>
+    </>
         )
     }
     
@@ -128,9 +157,8 @@ export default function AnimalProfiles() {
         <hr></hr>
         </h1></div>
         <div>        
-            {DivisionButton()}
+            {DivisionButton()}{GroupByHavingButton()}
         </div>
-        {/* <div><input type="text" placeholder="Search..." name="search" className="searchBox"></input></div> */}
         <div className="container">
         <div className="column names">{GetColumnContents(0, Math.ceil(animals.length / 2))}</div>
         <div className="column names">{GetColumnContents(Math.ceil(animals.length / 2), animals.length)}</div>

@@ -55,6 +55,12 @@ router.get("/fetch-division", async (req, res) => {
   res.json({ data: tableContent });
 });
 
+router.get("/fetch-group-by-having", async (req, res) => {
+  const tableContent = await appService.groupByHaving();
+  res.json({ data: tableContent });
+});
+
+
 router.delete("/delete-animal", async (req, res) => {
   const id = req.body.animalID;
   const ans = await appService.deleteAnimal(id);
