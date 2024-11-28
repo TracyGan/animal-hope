@@ -49,8 +49,8 @@ export default function AnimalProfiles() {
                         {DisplayAnimal(a)}
                     <table className="profileInfo">
                         <tbody>
-                    <tr><td className="bold profileInfo">Age:</td><td>{a.Age}</td><td className="bold profileInfo">Status:</td><td>{a.adoptionHistory}</td></tr>
                     <tr><td className="bold profileInfo">Type:</td><td>{a.Type}</td><td className="bold profileInfo">Breed:</td><td>{a.Breed}</td></tr>
+                    <tr><td className="bold profileInfo">Age:</td><td>{a.Age}</td><td className="bold profileInfo">ID:</td><td>{a.ID}</td></tr>
                     </tbody>
                     </table>
                     </div>
@@ -166,39 +166,3 @@ export default function AnimalProfiles() {
         </>
     ) 
 }
-
-
-
-// function AnimalPage() {
-//     const id = Number(useParams().id);
-//     const animal = animals.find(a => a.id === id);
-//     return (
-//         <>
-//         <div>
-//             <h1 className="heading fw-bold mt-5 header">
-//             {animal.name}
-//             <hr></hr></h1>
-//             <button className="addButton">Update Status</button>
-//         </div>
-
-//         <div>
-//             {MakeAnimalTable(animal)}
-//         </div>
-//         </>
-//     )
-// } 
-
-// function MakeAnimalTable(animal) {
-//     return (
-//         <table className="centredTable">
-//             <tr> <td className="clientKeys">Animal ID: </td> <td className="names"> {animal.Id}</td></tr>
-//             <tr> <td className="clientKeys">Type: </td> <td className="names"> {animal.type}</td></tr>
-//             <tr> <td className="clientKeys">Breed: </td> <td className="names"> {animal.Breed}</td></tr>
-//             <tr> <td className="clientKeys">Age: </td> <td className="names"> {animal.Age}</td></tr>
-//             <tr> <td className="clientKeys">Arrival Date: </td> <td className="names"> {animal.Arrival}</td></tr>
-//             <tr> <td className="clientKeys">Status: </td> <td className="names"> adopted/fostered/available</td></tr>
-//             <tr> <td className="clientKeys">Foster History: </td> <td className="names"> {animal.adoptionHistory}</td></tr>
-//             <tr> <td className="clientKeys">Adoption History: </td> <td className="names"> {animal.fosterHistory}</td></tr>
-//         </table>
-//     )
-// }
