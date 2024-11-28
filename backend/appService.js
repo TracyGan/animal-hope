@@ -222,7 +222,20 @@ async function division() {
 	        FROM Walks W
 	        WHERE V.ID = W.Volunteer_ID))`
   );
-    return result.rows; // # of rows deleted
+    return result.rows; 
+  }) 
+}
+
+async function groupByHaving() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `SELECT A.Breed, AVG(A.Age)
+        FROM Animal A
+        GROUP BY A.Breed
+        HAVING AVG(A.age) >= ALL (SELECT AVG(A2.Age)
+        FROM Animal A2)`
+  );
+    return result.rows; 
   }) 
 }
 
@@ -257,7 +270,8 @@ module.exports = {
   deleteAnimal,
   fetchClientNames,
   division,
-  getClientProjection
+  getClientProjection,
+  groupByHaving,
 };
 
 
