@@ -132,6 +132,26 @@ async function initiateDemotable() {
   });
 }
 
+async function fetchFeaturesFeed(selection, table) {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `SELECT DISTINCT ${selection} FROM ${table}`
+    );
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function fetchFeedtable() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(`SELECT * FROM Feed`);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
 async function validateSignIn(username, password) {
   return await withOracleDB(async (connection) => {
     console.log("in appservice");
@@ -161,23 +181,93 @@ async function insertDemotable(id, name) {
   });
 }
 
+async function fetchDonationtable(selection, order, condition) {
+  return await withOracleDB(async (connection) => {
+    let query = `SELECT * FROM Donation JOIN Client ON Client.ID=Donation.Client_ID ORDER BY ${selection} ${order}`;
+
+    if (condition == "Foster") {
+      console.log("in foster");
+      query = `SELECT * FROM Donation 
+      JOIN Client ON Client.ID=Donation.Client_ID 
+      WHERE Client.AdopterPersonCertificationID IS NULL 
+        AND Client.FosterPersonCertificationID IS NOT NULL
+      ORDER BY ${selection} ${order}`;
+    } else if (condition == "Adopter") {
+      query = `SELECT * FROM Donation 
+      JOIN Client ON Client.ID=Donation.Client_ID 
+      WHERE Client.FosterPersonCertificationID IS NULL 
+        AND Client.AdopterPersonCertificationID IS NOT NULL 
+      ORDER BY ${selection} ${order}`;
+    }
+    const result = await connection.execute(query);
+
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function nestedAgg() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(`
+      SELECT Client.ID, Client.Name, Client.EmailAddress, SUM(D.Amount), Client.FosterPersonCertificationID, Client.AdopterPersonCertificationID
+      FROM Donation D
+      JOIN Client ON Client.ID = D.Client_ID
+      GROUP BY Client.ID, Client.Name, Client.EmailAddress, Client.FosterPersonCertificationID, Client.AdopterPersonCertificationID
+      HAVING SUM(D.Amount) > (SELECT AVG(d1.amount) FROM Donation d1)
+    `);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function updateFeedtable(id, feature, value) {
+  return await withOracleDB(async (connection) => {
+    let query = `UPDATE Feed SET ${feature} =: value WHERE ID =: id`;
+
+    if (feature == "DateTime") {
+      query = `UPDATE Feed SET ${feature} = TO_TIMESTAMP(:value, 'yyyy-MM-dd HH24:MI:SS') WHERE ID = :id`;
+    }
+
+    const result = await connection.execute(
+      query,
+      { value: value, id: id },
+      { autoCommit: true }
+    );
+
+    console.log(result);
+
+    return result.rowsAffected && result.rowsAffected > 0;
+  }).catch(() => {
+    return false;
+  });
+}
+
 async function updateFoodtable(price, amount, name, brand) {
   return await withOracleDB(async (connection) => {
-    console.log("app service - update food");
-    console.log(price);
-    console.log(amount);
     const result = await connection.execute(
       `UPDATE Food SET Price=:price, AmountInStock=:amount WHERE Name=:name AND Brand=:brand`,
       [price, amount, name, brand],
       { autoCommit: true }
     );
-    console.log("result");
-    return true;
-    // return result.rowsAffected && result.rowsAffected > 0;
+    // return true;
+    return result.rowsAffected && result.rowsAffected > 0;
   }).catch(() => {
     return false;
   });
 }
+
+async function calculateAverageDonation() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(`SELECT AVG(Amount) FROM Donation`);
+    console.log(result.rows[0]);
+    return result.rows[0];
+  }).catch(() => {
+    return false;
+  });
+}
+
 
 async function updateNameDemotable(oldName, newName) {
   return await withOracleDB(async (connection) => {
@@ -239,6 +329,95 @@ async function groupByHaving() {
   }) 
 }
 
+async function getPetNames() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT ID, Name FROM Animal");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function getPaidStaff() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT UserName, Name, TrainingID, University FROM PaidStaff WHERE OfficeNumber IS NULL");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function getVolunteers() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT * FROM Volunteer");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function getWalks() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      'SELECT w.ID AS Walk_ID, w.Animal_ID, a.Name AS Animal_Name, w.Volunteer_ID, w.Duration, w.DateTime FROM Walks w JOIN Animal a ON w.Animal_ID = a.ID');
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function getFeeds() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT f.ID, f.Animal_ID, a.Name, f.PaidStaff_Username, f.DateTime FROM Feed f JOIN Animal a ON f.Animal_ID = a.ID");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function getTreats() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT v.ID, t.Animal_ID, a.Name, t.PaidStaff_Username, t.DateTime FROM TreatedBy t JOIN VetVisit v ON (t.Animal_ID = v.Animal_ID AND t.DateTime = v.DateTime) JOIN Animal a ON t.Animal_ID = a.ID");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function getMaxWalkID() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute('SELECT MAX(ID) FROM Walks');
+    console.log(result);
+    return result.rows[0][0];
+  }).catch(() => {
+    return 0;
+  });
+}
+
+async function insertWalks(id, animalID, volunteerID, duration, dateTime) {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `INSERT INTO Walks (ID, Animal_ID, Volunteer_ID, Duration, DateTime) 
+       VALUES (:1, :2, :3, :4, TO_DATE(:5, 'YYYY-MM-DD HH24:MI:SS'))`,
+      [id, animalID, volunteerID, duration, dateTime],
+      { autoCommit: true }
+    );
+    return result.rowsAffected && result.rowsAffected > 0;
+  }).catch(() => {
+    return false;
+  });
+}
+
+async function getWalksPerVolunteer() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute('SELECT COUNT(w.ID), v.Name FROM Walks w INNER JOIN Volunteer v ON v.ID = w.Volunteer_ID GROUP BY v.Name');
+    console.log(result);
+    return result.rows;
+  }).catch(() => {
+    return 0;
+  });
+}
+
 module.exports = {
   testOracleConnection,
   fetchDemotableFromDb,
@@ -254,6 +433,21 @@ module.exports = {
   fetchClienttable,
   division,
   groupByHaving,
+  getPetNames, 
+  getPaidStaff,
+  getVolunteers,
+  getWalks, 
+  getFeeds,
+  getTreats,
+  insertWalks,
+  getMaxWalkID,
+  fetchDonationtable,
+  fetchFeedtable,
+  updateFeedtable,
+  fetchFeaturesFeed,
+  calculateAverageDonation,
+  nestedAgg,
+  getWalksPerVolunteer,
 };
 
 

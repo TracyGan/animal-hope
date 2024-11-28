@@ -1,11 +1,15 @@
 import "./signin.css";
 import React, { useState, useEffect } from "react";
+import sanitization from "../sanitization";
 
 async function validateSignIn(event, setError) {
   event.preventDefault();
 
   const username = document.getElementById("inputUsername").value;
   const password = document.getElementById("inputPassword").value;
+
+  sanitization(username);
+  sanitization(password);
   console.log(username);
 
   const response = await fetch("/backend/validate-signin", {

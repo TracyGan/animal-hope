@@ -72,6 +72,47 @@ router.get("/fetch-foodtable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
+router.get("/fetch-feedtable", async (req, res) => {
+  const tableContent = await appService.fetchFeedtable();
+  res.json({ data: tableContent });
+});
+
+router.get("/nested-agg", async (req, res) => {
+  const tableContent = await appService.nestedAgg();
+  res.json({ data: tableContent });
+});
+
+router.get("/calculate-averageDonation", async (req, res) => {
+  const tableContent = await appService.calculateAverageDonation();
+  res.json({ data: tableContent });
+});
+
+router.get("/fetch-donationtable", async (req, res) => {
+  const { selection = "DonationDate", order = "DESC", condition } = req.query;
+  const tableContent = await appService.fetchDonationtable(
+    selection,
+    order,
+    condition
+  );
+  res.json({ data: tableContent });
+});
+
+router.get("/fetch-featuresFeed", async (req, res) => {
+  const { selection, table } = req.query;
+  const tableContent = await appService.fetchFeaturesFeed(selection, table);
+  res.json({ data: tableContent });
+});
+
+router.post("/update-feed", async (req, res) => {
+  const { id, feature, value } = req.body;
+  const updateResult = await appService.updateFeedtable(id, feature, value);
+  if (updateResult) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ success: false });
+  }
+});
+
 router.post("/update-food", async (req, res) => {
   const { price, amount, name, brand } = req.body;
   const updateResult = await appService.updateFoodtable(
@@ -121,5 +162,56 @@ router.get("/count-demotable", async (req, res) => {
     });
   }
 });
+
+router.get("/get-pet-names", async (req, res) => {
+  const result = await appService.getPetNames();
+  res.json({ data: result });
+});
+
+router.get("/get-paidStaff", async (req, res) => {
+  const result = await appService.getPaidStaff();
+  res.json({ data: result });
+});
+
+router.get("/get-volunteers", async (req, res) => {
+  const result = await appService.getVolunteers();
+  res.json({ data: result });
+});
+
+router.get("/get-walks", async (req, res) => {
+  const result = await appService.getWalks();
+  res.json({ data: result });
+});
+
+router.get("/get-feeds", async (req, res) => {
+  const result = await appService.getFeeds();
+  res.json({ data: result });
+});
+
+router.get("/get-treats", async (req, res) => {
+  const result = await appService.getTreats();
+  res.json({ data: result });
+});
+
+router.get("/get-maxWalkID", async (req, res) => {
+  const result = await appService.getMaxWalkID();
+  res.json({ data: result });
+});
+
+router.post("/insert-walks", async (req, res) => {
+  const { id, animalID, volunteerID, duration, dateTime} = req.body;
+  const insertResult = await appService.insertWalks(id, animalID, volunteerID, duration, dateTime);
+  if (insertResult) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ success: false });
+  }
+});
+
+router.get("/get-walks-per-volunteer", async (req, res) => {
+  const result = await appService.getWalksPerVolunteer();
+  res.json({ data: result });
+});
+
 
 module.exports = router;

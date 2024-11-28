@@ -1,0 +1,22 @@
+.navBox{
+    background-color: rgb(255, 198, 147);
+    margin-bottom: 0;
+    overflow: hidden;
+}
+
+.navBox a {
+    text-align: center;
+    padding: 10px;
+    text-decoration: none;
+    color: white;
+}
+
+.navBox a:hover {
+    background-color: rgb(255, 255, 255);
+    color: black;
+}
+
+.navBox a.active {
+    background-color: white;
+    color: black;
+}
