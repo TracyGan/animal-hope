@@ -410,11 +410,28 @@ async function insertWalks(id, animalID, volunteerID, duration, dateTime) {
 
 async function getWalksPerVolunteer() {
   return await withOracleDB(async (connection) => {
-    const result = await connection.execute('SELECT COUNT(w.ID), v.Name FROM Walks w INNER JOIN Volunteer v ON v.ID = w.Volunteer_ID GROUP BY v.Name');
+    const result = await connection.execute('SELECT COUNT(w.ID), v.Name FROM Walks w JOIN Volunteer v ON v.ID = w.Volunteer_ID GROUP BY v.Name');
     console.log(result);
     return result.rows;
   }).catch(() => {
     return 0;
+  });
+}
+
+async function getClientProjection(columns) {
+  var colQuery = "";
+  columns.map((columnName) => {
+    colQuery = colQuery + ", " + columnName ;
+  });
+  colQuery = 'SELECT Name' + colQuery + ' FROM Client';
+  console.log("colQuery: ", colQuery);
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      colQuery
+    );
+    return result.rows;
+  }).catch(() => {
+    return [];
   });
 }
 
@@ -448,6 +465,7 @@ module.exports = {
   calculateAverageDonation,
   nestedAgg,
   getWalksPerVolunteer,
+  getClientProjection,
 };
 
 

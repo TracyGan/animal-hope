@@ -163,4 +163,62 @@ router.get("/count-demotable", async (req, res) => {
   }
 });
 
+router.post("/get-client-projection", async (req, res) => {
+  const { columns } = req.body;
+  const result = await appService.getClientProjection(columns);
+  // console.log("result: ", result);
+  res.json({ data: result });
+});
+
+router.get("/get-pet-names", async (req, res) => {
+  const result = await appService.getPetNames();
+  res.json({ data: result });
+});
+
+router.get("/get-paidStaff", async (req, res) => {
+  const result = await appService.getPaidStaff();
+  res.json({ data: result });
+});
+
+router.get("/get-volunteers", async (req, res) => {
+  const result = await appService.getVolunteers();
+  res.json({ data: result });
+});
+
+router.get("/get-walks", async (req, res) => {
+  const result = await appService.getWalks();
+  res.json({ data: result });
+});
+
+router.get("/get-feeds", async (req, res) => {
+  const result = await appService.getFeeds();
+  res.json({ data: result });
+});
+
+router.get("/get-treats", async (req, res) => {
+  const result = await appService.getTreats();
+  res.json({ data: result });
+});
+
+router.get("/get-maxWalkID", async (req, res) => {
+  const result = await appService.getMaxWalkID();
+  res.json({ data: result });
+});
+
+router.post("/insert-walks", async (req, res) => {
+  const { id, animalID, volunteerID, duration, dateTime} = req.body;
+  const insertResult = await appService.insertWalks(id, animalID, volunteerID, duration, dateTime);
+  if (insertResult) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ success: false });
+  }
+});
+
+router.get("/get-walks-per-volunteer", async (req, res) => {
+  const result = await appService.getWalksPerVolunteer();
+  res.json({ data: result });
+});
+
+
 module.exports = router;
