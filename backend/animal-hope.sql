@@ -241,5 +241,125 @@ VALUES (8003, 'Tori', 'victorious@mail.com', 8391, 12);
 INSERT INTO Client(ID, Name, EmailAddress, FosterPersonCertificationID, AdopterPersonCertificationID)
 VALUES (8004, 'Jade', 'jade@mail.com', 2309, 1);
 
+-- Volunteer
+INSERT INTO Volunteer(ID, Name)
+VALUES (100, 'Tracy');
+
+INSERT INTO Volunteer(ID, Name)
+VALUES (101, 'Sydney');
+
+INSERT INTO Volunteer(ID, Name)
+VALUES (102, 'Kelly');
+
+INSERT INTO Volunteer(ID, Name)
+VALUES (103, 'Amy');
+
+INSERT INTO Volunteer(ID, Name)
+VALUES (104, 'Tracy');
+
+-- Walks
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5000, 4000, 100, 1.5, TIMESTAMP '2024-10-12 15:30:21');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5002, 4004, 102, 0.5, TIMESTAMP '2024-09-18 13:59:19');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5004, 4004, 104, 2.5, TIMESTAMP '2024-04-25 11:31:01');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5003, 4000, 101, NULL, TIMESTAMP '2024-07-01 12:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5005, 4001, 101, NULL, TIMESTAMP '2024-07-01 12:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5006, 4002, 101, NULL, TIMESTAMP '2024-07-01 13:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5007, 4003, 101, NULL, TIMESTAMP '2024-07-01 14:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5008, 4004, 101, NULL, TIMESTAMP '2024-07-01 15:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5009, 4005, 101, NULL, TIMESTAMP '2024-07-01 16:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5010, 4006, 101, NULL, TIMESTAMP '2024-07-01 17:24:42');
+
+--
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5013, 4000, 102, NULL, TIMESTAMP '2024-08-01 12:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5015, 4001, 102, NULL, TIMESTAMP '2024-08-01 12:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5016, 4002, 102, NULL, TIMESTAMP '2024-08-01 13:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5017, 4003, 102, NULL, TIMESTAMP '2024-08-01 14:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5018, 4004, 102, NULL, TIMESTAMP '2024-08-01 15:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5019, 4005, 102, NULL, TIMESTAMP '2024-08-01 16:24:42');
+
+INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
+VALUES (5020, 4006, 102, NULL, TIMESTAMP '2024-08-01 17:24:42');
+
+
+
+
+-- Feed
+INSERT INTO Feed(ID, Animal_ID, PaidStaff_Username, Food_Brand, Food_Name, DateTime)
+VALUES (6000, 4002, 'HarryStyles', 'Purina', 'Pro Plan Live Clear', TIMESTAMP '2024-10-13 10:30:00');
+
+INSERT INTO Feed(ID, Animal_ID, PaidStaff_Username, Food_Brand, Food_Name, DateTime)
+VALUES (6001, 4006, 'HarryStyles', 'Nutrena', 'SafeChoice Original Horse Feed', TIMESTAMP '2024-09-29 19:45:00');
+
+INSERT INTO Feed(ID, Animal_ID, PaidStaff_Username, Food_Brand, Food_Name, DateTime)
+VALUES (6002, 4003, 'HarryStyles', 'ADM Animal Nutrition', 'Pen Pals Rabbit Feed', TIMESTAMP '2024-02-29 09:15:00');
+
+INSERT INTO Feed(ID, Animal_ID, PaidStaff_Username, Food_Brand, Food_Name, DateTime)
+VALUES (6003, 4005, 'HarryStyles', 'Purina', 'Layena Crumbles', TIMESTAMP '2023-11-28 12:45:00');
+
+INSERT INTO Feed(ID, Animal_ID, PaidStaff_Username, Food_Brand, Food_Name, DateTime)
+VALUES (6004, 4005, 'HarryStyles', 'Royal Canin', 'Feline Health Nutrition Indoor', TIMESTAMP '2022-07-08 08:30:00');
+
+-- Vet Visit
+INSERT INTO VetVisit(ID, Animal_ID, DateTime)
+VALUES (7000, 4001, TIMESTAMP '2023-10-13 10:30:00');
+
+INSERT INTO VetVisit(ID, Animal_ID, DateTime)
+VALUES (7001, 4002, TIMESTAMP '2024-03-21 13:45:00');
+
+INSERT INTO VetVisit(ID, Animal_ID, DateTime)
+VALUES (7002, 4001, TIMESTAMP '2022-04-08 10:39:00');
+
+INSERT INTO VetVisit(ID, Animal_ID, DateTime)
+VALUES (7003, 4000, TIMESTAMP '2023-11-28 12:45:00');
+
+INSERT INTO VetVisit(ID, Animal_ID, DateTime)
+VALUES (7004, 4004, TIMESTAMP '2022-12-25 09:30:00');
+
+-- TreatedBy
+INSERT INTO TreatedBy(Animal_ID, PaidStaff_Username, DateTime)
+VALUES (4001, 'LiamPayne', TIMESTAMP '2023-10-13 10:30:00');
+
+INSERT INTO TreatedBy(Animal_ID, PaidStaff_Username, DateTime)
+VALUES (4002, 'LouisTomlinson', TIMESTAMP '2024-03-21 13:45:00');
+
+INSERT INTO TreatedBy(Animal_ID, PaidStaff_Username, DateTime)
+VALUES (4001, 'LouisTomlinson', TIMESTAMP '2022-04-08 10:39:00');
+
+INSERT INTO TreatedBy(Animal_ID, PaidStaff_Username, DateTime)
+VALUES (4000, 'LouisTomlinson', TIMESTAMP '2023-11-28 12:45:00');
+
+INSERT INTO TreatedBy(Animal_ID, PaidStaff_Username, DateTime)
+VALUES (4004, 'LiamPayne', TIMESTAMP '2022-12-25 09:30:00');
+
 Commit;
 

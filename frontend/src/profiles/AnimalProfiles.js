@@ -1,5 +1,8 @@
 import "./profiles.css"
 import React, { useState, useEffect } from 'react';
+import Modal from '@mui/material/Modal';
+
+
 // import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
 
 // export default function AnimalProfiles() {
@@ -15,7 +18,6 @@ import React, { useState, useEffect } from 'react';
 
 export default function AnimalProfiles() {
     const [animals, setAnimals] = useState([]);
-    console.log("helloooo");
     async function fetchData() {
         const response = await fetch("/backend/fetch-animaltable", {
             method: "GET",
@@ -46,8 +48,10 @@ export default function AnimalProfiles() {
                     <div>
                         {DisplayAnimal(a)}
                     <table className="profileInfo">
-                    <tr><td className="bold profileInfo">Age:</td> <td>{a.Age}</td><td className="bold profileInfo">Status:</td> <td>{a.adoptionHistory}</td></tr>
-                    <tr><td className="bold profileInfo">Type:</td> <td>{a.Type}</td><td className="bold profileInfo">Breed:</td> <td>{a.Breed}</td></tr>
+                        <tbody>
+                    <tr><td className="bold profileInfo">Age:</td><td>{a.Age}</td><td className="bold profileInfo">Status:</td><td>{a.adoptionHistory}</td></tr>
+                    <tr><td className="bold profileInfo">Type:</td><td>{a.Type}</td><td className="bold profileInfo">Breed:</td><td>{a.Breed}</td></tr>
+                    </tbody>
                     </table>
                     </div>
                     </div>
@@ -86,6 +90,35 @@ export default function AnimalProfiles() {
             <img src={url} className="animalImg" alt="animal"></img>
         )
     }
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    function DivisionButton() {
+        const [volunteers, setVolunteers] = useState([]);
+        async function getVolunteers() {
+            const response = await fetch("/backend/fetch-division", {
+                method: "GET",
+              });
+              const responseData = await response.json();
+            setVolunteers(responseData.data);    
+        }
+        useEffect(() => {getVolunteers()}, []);
+        return (
+            <div>
+        <button className="projSelected" onClick={handleOpen}>Friends of the Animals!</button>
+
+      <Modal open={open} onClose={handleClose}>
+        <div className="division"> 
+            <p>These volunteers have walked every animal:</p> 
+            <p>{volunteers.length > 0 ? `${volunteers.map((v) => v[0]).join(', ')}` : "No one has walked every animal..."}</p>
+            </div>
+        
+      </Modal>
+    </div>
+        )
+    }
     
        return (
         <>
@@ -95,7 +128,7 @@ export default function AnimalProfiles() {
         <hr></hr>
         </h1></div>
         <div>        
-            <button className="addButton">Add New Animal</button>
+            {DivisionButton()}
         </div>
         {/* <div><input type="text" placeholder="Search..." name="search" className="searchBox"></input></div> */}
         <div className="container">

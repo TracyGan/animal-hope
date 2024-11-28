@@ -211,6 +211,21 @@ async function deleteAnimal(id) {
   })
 }
 
+async function division() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `SELECT Name 
+      FROM Volunteer V
+      WHERE NOT EXISTS 
+        ((SELECT A.ID FROM Animal A) MINUS
+	        (SELECT W.Animal_ID
+	        FROM Walks W
+	        WHERE V.ID = W.Volunteer_ID))`
+  );
+    return result.rows; // # of rows deleted
+  }) 
+}
+
 module.exports = {
   testOracleConnection,
   fetchDemotableFromDb,
@@ -224,6 +239,7 @@ module.exports = {
   fetchAnimaltable,
   deleteAnimal,
   fetchClienttable,
+  division,
 };
 
 

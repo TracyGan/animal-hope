@@ -50,6 +50,11 @@ router.get("/fetch-clienttable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
+router.get("/fetch-division", async (req, res) => {
+  const tableContent = await appService.division();
+  res.json({ data: tableContent });
+});
+
 router.delete("/delete-animal", async (req, res) => {
   const id = req.body.animalID;
   const ans = await appService.deleteAnimal(id);
