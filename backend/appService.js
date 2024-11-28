@@ -85,9 +85,9 @@ async function fetchDemotableFromDb() {
   });
 }
 
-async function fetchClienttable() {
+async function fetchClientNames() {
   return await withOracleDB(async (connection) => {
-    const result = await connection.execute("SELECT * FROM Client");
+    const result = await connection.execute("SELECT Name FROM Client");
     return result.rows;
   }).catch(() => {
     return [];
@@ -226,6 +226,23 @@ async function division() {
   }) 
 }
 
+async function getClientProjection(columns) {
+  var colQuery = "";
+  columns.map((columnName) => {
+    colQuery = colQuery + ", " + columnName ;
+  });
+  colQuery = 'SELECT Name' + colQuery + ' FROM Client';
+  console.log("colQuery: ", colQuery);
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      colQuery
+    );
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
 module.exports = {
   testOracleConnection,
   fetchDemotableFromDb,
@@ -238,8 +255,9 @@ module.exports = {
   updateFoodtable,
   fetchAnimaltable,
   deleteAnimal,
-  fetchClienttable,
+  fetchClientNames,
   division,
+  getClientProjection
 };
 
 

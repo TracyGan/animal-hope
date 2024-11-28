@@ -45,8 +45,8 @@ router.get("/fetch-animaltable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
-router.get("/fetch-clienttable", async (req, res) => {
-  const tableContent = await appService.fetchClienttable();
+router.get("/fetch-client-names", async (req, res) => {
+  const tableContent = await appService.fetchClientNames();
   res.json({ data: tableContent });
 });
 
@@ -114,6 +114,13 @@ router.get("/count-demotable", async (req, res) => {
       count: tableCount,
     });
   }
+});
+
+router.post("/get-client-projection", async (req, res) => {
+  const { columns } = req.body;
+  const result = await appService.getClientProjection(columns);
+  // console.log("result: ", result);
+  res.json({ data: result });
 });
 
 module.exports = router;
