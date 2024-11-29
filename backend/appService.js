@@ -85,6 +85,24 @@ async function fetchDemotableFromDb() {
   });
 }
 
+async function fetchClienttable() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT * FROM Client");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function fetchAnimaltable() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT * FROM Animal A, AnimalTypes T WHERE A.Breed = T.Breed");
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
 async function fetchFoodtable() {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(`SELECT * FROM Food`);
@@ -131,6 +149,26 @@ async function initiateDemotable() {
     return true;
   }).catch(() => {
     return false;
+  });
+}
+
+async function fetchFeaturesFeed(selection, table) {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `SELECT DISTINCT ${selection} FROM ${table}`
+    );
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function fetchFeedtable() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(`SELECT * FROM Feed`);
+    return result.rows;
+  }).catch(() => {
+    return [];
   });
 }
 
@@ -249,6 +287,7 @@ async function calculateAverageDonation() {
   });
 }
 
+
 async function updateNameDemotable(oldName, newName) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
@@ -270,6 +309,43 @@ async function countDemotable() {
   }).catch(() => {
     return -1;
   });
+}
+
+async function deleteAnimal(id) {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("DELETE FROM Animal WHERE ID=:id", [id], { autoCommit: true });
+    return result; // # of rows deleted
+  }).catch(() => {
+    return 0; 
+  })
+}
+
+async function division() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `SELECT Name 
+      FROM Volunteer V
+      WHERE NOT EXISTS 
+        ((SELECT A.ID FROM Animal A) MINUS
+	        (SELECT W.Animal_ID
+	        FROM Walks W
+	        WHERE V.ID = W.Volunteer_ID))`
+  );
+    return result.rows; 
+  }) 
+}
+
+async function groupByHaving() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `SELECT A.Breed, AVG(A.Age)
+        FROM Animal A
+        GROUP BY A.Breed
+        HAVING AVG(A.age) >= ALL (SELECT AVG(A2.Age)
+        FROM Animal A2)`
+  );
+    return result.rows; 
+  }) 
 }
 
 async function getPetNames() {
@@ -353,11 +429,28 @@ async function insertWalks(id, animalID, volunteerID, duration, dateTime) {
 
 async function getWalksPerVolunteer() {
   return await withOracleDB(async (connection) => {
-    const result = await connection.execute('SELECT COUNT(w.ID), v.Name FROM Walks w INNER JOIN Volunteer v ON v.ID = w.Volunteer_ID GROUP BY v.Name');
+    const result = await connection.execute('SELECT COUNT(w.ID), v.Name FROM Walks w JOIN Volunteer v ON v.ID = w.Volunteer_ID GROUP BY v.Name');
     console.log(result);
     return result.rows;
   }).catch(() => {
     return 0;
+  });
+}
+
+async function getClientProjection(columns) {
+  var colQuery = "";
+  columns.map((columnName) => {
+    colQuery = colQuery + ", " + columnName ;
+  });
+  colQuery = 'SELECT Name' + colQuery + ' FROM Client';
+  console.log("colQuery: ", colQuery);
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      colQuery
+    );
+    return result.rows;
+  }).catch(() => {
+    return [];
   });
 }
 
@@ -371,6 +464,11 @@ module.exports = {
   validateSignIn,
   fetchFoodtable,
   updateFoodtable,
+  fetchAnimaltable,
+  deleteAnimal,
+  fetchClienttable,
+  division,
+  groupByHaving,
   getPetNames, 
   getPaidStaff,
   getVolunteers,
@@ -385,5 +483,8 @@ module.exports = {
   fetchFeaturesFeed,
   calculateAverageDonation,
   nestedAgg,
-  getWalksPerVolunteer
+  getWalksPerVolunteer,
+  getClientProjection,
 };
+
+

@@ -40,6 +40,33 @@ router.post("/validate-signin", async (req, res) => {
   }
 });
 
+router.get("/fetch-animaltable", async (req, res) => {
+  const tableContent = await appService.fetchAnimaltable();
+  res.json({ data: tableContent });
+});
+
+router.get("/fetch-clienttable", async (req, res) => {
+  const tableContent = await appService.fetchClienttable();
+  res.json({ data: tableContent });
+});
+
+router.get("/fetch-division", async (req, res) => {
+  const tableContent = await appService.division();
+  res.json({ data: tableContent });
+});
+
+router.get("/fetch-group-by-having", async (req, res) => {
+  const tableContent = await appService.groupByHaving();
+  res.json({ data: tableContent });
+});
+
+
+router.delete("/delete-animal", async (req, res) => {
+  const id = req.body.animalID;
+  const ans = await appService.deleteAnimal(id);
+  res.json({result : ans.rowsAffected});
+})
+
 router.get("/fetch-foodtable", async (req, res) => {
   const tableContent = await appService.fetchFoodtable();
   res.json({ data: tableContent });
@@ -134,6 +161,12 @@ router.get("/count-demotable", async (req, res) => {
       count: tableCount,
     });
   }
+});
+
+router.post("/get-client-projection", async (req, res) => {
+  const { columns } = req.body;
+  const result = await appService.getClientProjection(columns);
+  res.json({ data: result });
 });
 
 router.get("/get-pet-names", async (req, res) => {

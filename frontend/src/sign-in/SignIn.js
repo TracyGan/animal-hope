@@ -1,8 +1,9 @@
 import "./signin.css";
 import React, { useState, useEffect } from "react";
 import sanitization from "../sanitization";
+import { useNavigate } from "react-router-dom";
 
-async function validateSignIn(event, setError) {
+async function validateSignIn(event, setError, navigate) {
   event.preventDefault();
 
   const username = document.getElementById("inputUsername").value;
@@ -27,6 +28,7 @@ async function validateSignIn(event, setError) {
   if (responseData.success) {
     setError(false);
     console.log("Successfully entered");
+    navigate("/food");
   } else {
     console.log("Failed");
     setError(true);
@@ -35,13 +37,12 @@ async function validateSignIn(event, setError) {
 
 export default function SignIn() {
   const [error, setError] = useState(false);
-
+  const navigate = useNavigate();
   return (
     <div className="SignIn">
       <div className="container">
         <div className="row">
-          <div className="col-3"></div>
-          <div className="col-6">
+          <div className="col">
             <h1 className="mt-5 mb-5 fw-bold title"> AnimalHope</h1>
             <div className="card">
               <div className="row">
@@ -79,7 +80,7 @@ export default function SignIn() {
               <button
                 type="button"
                 className="btn btn-lg custom-btn btn-block mt-4"
-                onClick={(event) => validateSignIn(event, setError)}
+                onClick={(event) => validateSignIn(event, setError, navigate)}
               >
                 Sign In
               </button>

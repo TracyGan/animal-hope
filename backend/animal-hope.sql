@@ -113,7 +113,7 @@ CREATE TABLE Fosters(
     Client_ID INTEGER,
     Animal_ID INTEGER,
     StartDate TIMESTAMP NOT NULL,
-    EndDate DATE,
+    EndDate TIMESTAMP,
     PRIMARY KEY(Client_ID, Animal_ID),
     FOREIGN KEY(Client_ID) REFERENCES Client(ID) ON DELETE CASCADE,
     FOREIGN KEY(Animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE
@@ -132,7 +132,7 @@ CREATE TABLE Adopts(
 
 CREATE TABLE Makes(
     Appointment_ID INTEGER,
-    PaidStaff_Username INTEGER,
+    PaidStaff_Username VARCHAR2(20),
     Client_ID INTEGER,
     FOREIGN KEY (Appointment_ID) REFERENCES Appointment(ID) ON DELETE CASCADE,
     FOREIGN KEY (Client_ID) REFERENCES Client(ID) ON DELETE CASCADE,
@@ -140,13 +140,13 @@ CREATE TABLE Makes(
 );
 
 CREATE TABLE Orders(
-    Food_Brand VARCHAR2(20),
     Food_Name VARCHAR2(80),
+    Food_Brand VARCHAR2(20),
     PaidStaff_Username VARCHAR2(20),
     DateTime TIMESTAMP NOT NULL,
     FOREIGN KEY (Food_Name) REFERENCES Food(Name) ON DELETE CASCADE,
     FOREIGN KEY (PaidStaff_Username) REFERENCES PaidStaff(Username) ON DELETE CASCADE,
-    PRIMARY KEY(Food_Brand, Food_Name, PaidStaff_Username)
+    PRIMARY KEY(Food_Name, PaidStaff_Username)
 );
 
 CREATE TABLE Donation(
@@ -174,6 +174,65 @@ VALUES ('ADM Animal Nutrition', 'Pen Pals Rabbit Feed', 1, 45.0);
 
 INSERT INTO Food
 VALUES ('Purina', 'Layena Crumbles', 2, 20.0);
+
+-- AnimalTypes
+INSERT INTO AnimalTypes
+VALUES ('Golden Retriever', 'Dog');
+
+INSERT INTO AnimalTypes
+VALUES ('Corgi', 'Dog');
+
+INSERT INTO AnimalTypes
+VALUES ('Arabian', 'Horse');
+
+INSERT INTO AnimalTypes
+VALUES ('Siamese', 'Cat');
+
+INSERT INTO AnimalTypes
+VALUES ('Flemish Giant', 'Rabbit');
+
+INSERT INTO AnimalTypes
+VALUES ('Rottweiler', 'Dog');
+
+-- Animal
+INSERT INTO Animal
+VALUES (4000, 'Max', TO_DATE('2024-10-16 10:30:00', 'yyyy-MM-dd HH24:MI:SS'), 2, 'Corgi');
+
+INSERT INTO Animal
+VALUES (4001, 'Moose', TO_DATE('2010-10-12 19:45:00', 'yyyy-MM-dd HH24:MI:SS'), 10, 'Arabian');
+
+INSERT INTO Animal
+VALUES (4002, 'Ruff', TO_DATE('2022-05-24 10:56:01', 'yyyy-MM-dd HH24:MI:SS'), 2, 'Siamese');
+
+INSERT INTO Animal
+VALUES (4003, 'Meep', TO_DATE('2020-10-12 15:30:21', 'yyyy-MM-dd HH24:MI:SS'), 1, 'Flemish Giant');
+
+INSERT INTO Animal
+VALUES (4004, 'Hensem', TO_DATE('2024-10-12 08:30:21', 'yyyy-MM-dd HH24:MI:SS'), 4, 'Rottweiler');
+
+INSERT INTO Animal
+VALUES (4005, 'Runn', TO_DATE('2023-10-12 09:35:21','yyyy-MM-dd HH24:MI:SS'),  2, 'Golden Retriever');
+
+INSERT INTO Animal
+VALUES (4006, 'Runn', TO_DATE('2023-10-12 09:35:21','yyyy-MM-dd HH24:MI:SS'), 2, 'Arabian');
+
+
+-- Appointment
+INSERT INTO Appointment
+VALUES (3000, TO_DATE('2020-10-12 15:30:21', 'yyyy-MM-dd HH24:MI:SS'), 'Kennels');
+
+INSERT INTO Appointment
+VALUES (3001, TO_DATE('2020-10-13 09:59:27', 'yyyy-MM-dd HH24:MI:SS'), 'Cattery');
+
+INSERT INTO Appointment
+VALUES (3002, TO_DATE('2010-01-01 14:28:30', 'yyyy-MM-dd HH24:MI:SS'), 'Aquarium');
+
+INSERT INTO Appointment
+VALUES (3003, TO_DATE('2021-01-01 14:28:31', 'yyyy-MM-dd HH24:MI:SS'), 'Barn');
+
+INSERT INTO Appointment
+VALUES (3004, TO_DATE('2022-05-24 10:56:01', 'yyyy-MM-dd HH24:MI:SS'), 'Kennels');
+
 
 -- AnimalTypes
 INSERT INTO AnimalTypes
@@ -265,7 +324,6 @@ VALUES (6003, 4005, 'HarryStyles', 'Purina', 'Layena Crumbles', TO_TIMESTAMP('20
 INSERT INTO Feed
 VALUES (6004, 4005, 'HarryStyles', 'Royal Canin', 'Feline Health Nutrition Indoor', TO_TIMESTAMP('2022-07-08 08:30:00', 'yyyy-MM-dd HH24:MI:SS'));
 
-
 -- Donation
 INSERT INTO Donation
 VALUES (1300, TO_DATE('2024-10-16', 'yyyy-MM-dd'), 1000.0, 8001);
@@ -288,46 +346,73 @@ VALUES (1305, TO_DATE('2024-11-24', 'yyyy-MM-dd'), 500.0, 8002);
 INSERT INTO Donation
 VALUES (1306, TO_DATE('2024-09-20', 'yyyy-MM-dd'), 2000, 8003);
 
--- AnimalTypes
-INSERT INTO AnimalTypes(Breed, Type)
-VALUES ('Golden Retriever', 'Dog');
+-- Fosters
+INSERT INTO Fosters
+VALUES (8000, 4000, TO_DATE('2024-08-17', 'yyyy-MM-dd'), TO_DATE('2024-09-01', 'yyyy-MM-dd'));
 
-INSERT INTO AnimalTypes(Breed, Type)
-VALUES ('Corgi', 'Dog');
+INSERT INTO Fosters
+VALUES (8001, 4000, TO_DATE('2024-10-10', 'yyyy-MM-dd'), null);
 
-INSERT INTO AnimalTypes(Breed, Type)
-VALUES ('Arabian', 'Horse');
+INSERT INTO Fosters
+VALUES (8001, 4002,  TO_DATE('2022-03-01', 'yyyy-MM-dd'), TO_DATE('2023-09-01', 'yyyy-MM-dd'));
 
-INSERT INTO AnimalTypes(Breed, Type)
-VALUES ('Siamese', 'Cat');
+INSERT INTO Fosters
+VALUES (8002, 4002, TO_DATE('2023-11-21', 'yyyy-MM-dd'), TO_DATE('2024-05-21', 'yyyy-MM-dd'));
 
-INSERT INTO AnimalTypes(Breed, Type)
-VALUES ('Flemish Giant', 'Rabbit');
+INSERT INTO Fosters
+VALUES (8003, 4003, TO_DATE('2024-09-12', 'yyyy-MM-dd'), null);
 
-INSERT INTO AnimalTypes(Breed, Type)
-VALUES ('Rottweiler', 'Dog');
 
--- Animal
-INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
-VALUES (4000, 'Max', TIMESTAMP '2020-10-12 15:30:21', 2, 'Corgi');
+-- Adopts
+INSERT INTO Adopts
+VALUES (8000, 4002, TO_DATE('2024-06-27', 'yyyy-MM-dd'), 80.50);
 
-INSERT INTO Animal (ID, Name, ArrivalDate, Age, Breed)
-VALUES (4001, 'Moose', TIMESTAMP '2010-10-12 10:20:18', 10, 'Arabian');
+INSERT INTO Adopts
+VALUES (8000, 4004, TO_DATE('2024-01-11', 'yyyy-MM-dd'), 45);
 
-INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
-VALUES (4002, 'Ruff', TIMESTAMP '2022-05-24 10:56:01', 2, 'Siamese');
+INSERT INTO Adopts
+VALUES (8003, 4001, TO_DATE('2023-12-01', 'yyyy-MM-dd'), 30.15);
 
-INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
-VALUES (4003, 'Meep', TIMESTAMP '2020-10-12 15:30:21', 1, 'Flemish Giant');
+INSERT INTO Adopts
+VALUES (8003, 4005, TO_DATE('2022-05-30', 'yyyy-MM-dd'), 75);
 
-INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
-VALUES (4004, 'Hensem', TIMESTAMP '2024-10-12 08:30:21', 4, 'Rottweiler');
+INSERT INTO Adopts
+VALUES (8003, 4006, TO_DATE('2021-07-30', 'yyyy-MM-dd'), 50);
 
-INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
-VALUES (4005, 'Runn', TIMESTAMP '2023-10-12 09:35:21', 2, 'Golden Retriever');
 
-INSERT INTO Animal(ID, Name, ArrivalDate, Age, Breed)
-VALUES (4006, 'Runn', TIMESTAMP '2023-10-12 09:35:21', 2, 'Arabian');
+-- Makes
+INSERT INTO Makes
+VALUES (3000, 'ZaynMalik', 8004);
+
+INSERT INTO Makes
+VALUES (3001, 'ZaynMalik', 8002);
+
+INSERT INTO Makes
+VALUES (3002, 'NiallHoran', 8001);
+
+INSERT INTO Makes
+VALUES (3003, 'ZaynMalik', 8000);
+
+INSERT INTO Makes
+VALUES (3004, 'NiallHoran', 8001);
+
+
+-- Orders
+INSERT INTO Orders
+VALUES ('Pro Plan Live Clear', 'Purina', 'ZaynMalik', TO_DATE('2024-06-14 13:45:00', 'yyyy-MM-dd HH24:MI:SS'));
+
+INSERT INTO Orders
+VALUES('Feline Health Nutrition Indoor', 'Royal Canin', 'NiallHoran', TO_DATE('2024-07-30 15:10:00', 'yyyy-MM-dd HH24:MI:SS'));
+
+INSERT INTO Orders
+VALUES ('Pro Plan Live Clear', 'Purina', 'NiallHoran', TO_DATE('2024-09-18 13:00:00', 'yyyy-MM-dd HH24:MI:SS'));
+
+INSERT INTO Orders
+VALUES ('Layena Crumbles', 'Purina', 'ZaynMalik', TO_DATE('2024-10-01 16:53:00', 'yyyy-MM-dd HH24:MI:SS'));
+
+INSERT INTO Orders
+VALUES('Feline Health Nutrition Indoor', 'Royal Canin', 'ZaynMalik', TO_DATE('2024-10-04 12:00:00', 'yyyy-MM-dd HH24:MI:SS'));
+
 
 -- Volunteer
 INSERT INTO Volunteer(ID, Name)
@@ -360,22 +445,6 @@ VALUES (5003, 4001, 101, NULL, TIMESTAMP '2024-07-01 12:24:42');
 
 INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
 VALUES (5004, 4004, 104, 2.5, TIMESTAMP '2024-04-25 11:31:01');
-
--- Feed
-INSERT INTO Feed(ID, Animal_ID, PaidStaff_Username, Food_Brand, Food_Name, DateTime)
-VALUES (6000, 4002, 'HarryStyles', 'Purina', 'Pro Plan Live Clear', TIMESTAMP '2024-10-13 10:30:00');
-
-INSERT INTO Feed(ID, Animal_ID, PaidStaff_Username, Food_Brand, Food_Name, DateTime)
-VALUES (6001, 4006, 'HarryStyles', 'Nutrena', 'SafeChoice Original Horse Feed', TIMESTAMP '2024-09-29 19:45:00');
-
-INSERT INTO Feed(ID, Animal_ID, PaidStaff_Username, Food_Brand, Food_Name, DateTime)
-VALUES (6002, 4003, 'HarryStyles', 'ADM Animal Nutrition', 'Pen Pals Rabbit Feed', TIMESTAMP '2024-02-29 09:15:00');
-
-INSERT INTO Feed(ID, Animal_ID, PaidStaff_Username, Food_Brand, Food_Name, DateTime)
-VALUES (6003, 4005, 'HarryStyles', 'Purina', 'Layena Crumbles', TIMESTAMP '2023-11-28 12:45:00');
-
-INSERT INTO Feed(ID, Animal_ID, PaidStaff_Username, Food_Brand, Food_Name, DateTime)
-VALUES (6004, 4005, 'HarryStyles', 'Royal Canin', 'Feline Health Nutrition Indoor', TIMESTAMP '2022-07-08 08:30:00');
 
 -- Vet Visit
 INSERT INTO VetVisit(ID, Animal_ID, DateTime)

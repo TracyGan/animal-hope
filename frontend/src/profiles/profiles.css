@@ -1,0 +1,144 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    width: 100%;
+    justify-content: center;
+    align-content: center;
+}
+  
+  .column {
+    flex: 0;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .names {
+    color: black;
+    text-align: center;
+  }
+
+  .centredTable {
+    margin: 0 auto;
+  }
+
+  .clientKeys {
+    text-align: left;
+    color: black;
+    font-weight: bold;
+    padding-inline: 20px;
+  }
+
+  .projNotSelected {
+    margin: 10px;
+    padding: 2px 4px;
+    font-size: 15px;
+    color: rgb(103, 105, 103);
+    background-color: rgb(255, 255, 255);
+    border-color: rgb(103, 105, 103);
+    border-style: solid;
+    border-radius: 8px;
+  }
+
+  .projSelected {
+    margin: 10px;
+    padding: 2px 4px;
+    font-size: 15px;
+    color: rgb(88, 141, 85);
+    background-color: rgb(211, 254, 208);
+    border-color: rgb(88, 141, 85);
+    border-style: solid;
+    border-radius: 8px;
+  }
+
+  td {
+    text-align: left;
+  }
+
+  td.profileInfo {
+    padding-inline: 10px;
+  }
+
+  table.profileInfo {
+    margin: 0 auto;
+  }
+
+  .header {
+    color: black;
+    text-align: center;
+  }
+
+  .profileButton {
+    position: relative;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 30px;
+    background-color: rgb(196, 237, 255);
+    border-style: unset;
+    border-color: rgb(151, 216, 244);
+    border-radius: 10px;
+    font-size: 15px;
+    width: 400px;
+  }
+
+  .clientProfileButton {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 20px;
+    background-color: rgb(246, 255, 196);
+    border-style: unset;
+    border-color: rgb(151, 216, 244);
+    border-radius: 10px;
+    font-size: 15px;
+    width: 325px;
+  }
+
+  .animalImg {
+    padding-bottom: 10px;
+    object-fit: cover;
+    max-width: 70%;
+    height: auto;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .searchBox {
+    margin-top: 20px;
+    width: 200px;
+    height: 40px;
+  }
+
+  .topRDelete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 2px 4px;
+    width: 50px;
+    font-size: 10px;
+    color: #723434;
+    background-color: #fa9c9c;
+    border-color: #723434;
+    border-style: solid;
+    border-radius: 8px;
+  }
+
+  .popUp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    /* align-items: center; */
+    margin-top: 100px;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(255, 255, 255);
+    border-style: unset;
+    border-color: rgb(151, 216, 244);
+    border-radius: 10px;
+    font-size: 15px;
+    width: 350px;
+    height: auto;
+  }
