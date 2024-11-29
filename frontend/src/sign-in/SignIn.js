@@ -42,8 +42,7 @@ export default function SignIn() {
     <div className="SignIn">
       <div className="container">
         <div className="row">
-          <div className="col-3"></div>
-          <div className="col-6">
+          <div className="col">
             <h1 className="mt-5 mb-5 fw-bold title"> AnimalHope</h1>
             <div className="card">
               <div className="row">
