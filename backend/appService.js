@@ -112,6 +112,26 @@ async function fetchFoodtable() {
   });
 }
 
+async function fetchFeaturesFeed(selection, table) {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `SELECT DISTINCT ${selection} FROM ${table}`
+    );
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
+async function fetchFeedtable() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(`SELECT * FROM Feed`);
+    return result.rows;
+  }).catch(() => {
+    return [];
+  });
+}
+
 async function initiateDemotable() {
   return await withOracleDB(async (connection) => {
     try {
@@ -154,7 +174,6 @@ async function fetchFeedtable() {
 
 async function validateSignIn(username, password) {
   return await withOracleDB(async (connection) => {
-    console.log("in appservice");
     const result = await connection.execute(
       `SELECT * FROM PaidStaff WHERE Username =: username AND Password =: password`,
       [username, password],

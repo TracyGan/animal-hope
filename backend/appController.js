@@ -166,7 +166,6 @@ router.get("/count-demotable", async (req, res) => {
 router.post("/get-client-projection", async (req, res) => {
   const { columns } = req.body;
   const result = await appService.getClientProjection(columns);
-  // console.log("result: ", result);
   res.json({ data: result });
 });
 
@@ -219,6 +218,5 @@ router.get("/get-walks-per-volunteer", async (req, res) => {
   const result = await appService.getWalksPerVolunteer();
   res.json({ data: result });
 });
-
 
 module.exports = router;

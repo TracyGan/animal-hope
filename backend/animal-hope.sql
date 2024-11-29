@@ -175,6 +175,47 @@ VALUES ('ADM Animal Nutrition', 'Pen Pals Rabbit Feed', 1, 45.0);
 INSERT INTO Food
 VALUES ('Purina', 'Layena Crumbles', 2, 20.0);
 
+-- AnimalTypes
+INSERT INTO AnimalTypes
+VALUES ('Golden Retriever', 'Dog');
+
+INSERT INTO AnimalTypes
+VALUES ('Corgi', 'Dog');
+
+INSERT INTO AnimalTypes
+VALUES ('Arabian', 'Horse');
+
+INSERT INTO AnimalTypes
+VALUES ('Siamese', 'Cat');
+
+INSERT INTO AnimalTypes
+VALUES ('Flemish Giant', 'Rabbit');
+
+INSERT INTO AnimalTypes
+VALUES ('Rottweiler', 'Dog');
+
+-- Animal
+INSERT INTO Animal
+VALUES (4000, 'Max', TO_DATE('2024-10-16 10:30:00', 'yyyy-MM-dd HH24:MI:SS'), 2, 'Corgi');
+
+INSERT INTO Animal
+VALUES (4001, 'Moose', TO_DATE('2010-10-12 19:45:00', 'yyyy-MM-dd HH24:MI:SS'), 10, 'Arabian');
+
+INSERT INTO Animal
+VALUES (4002, 'Ruff', TO_DATE('2022-05-24 10:56:01', 'yyyy-MM-dd HH24:MI:SS'), 2, 'Siamese');
+
+INSERT INTO Animal
+VALUES (4003, 'Meep', TO_DATE('2020-10-12 15:30:21', 'yyyy-MM-dd HH24:MI:SS'), 1, 'Flemish Giant');
+
+INSERT INTO Animal
+VALUES (4004, 'Hensem', TO_DATE('2024-10-12 08:30:21', 'yyyy-MM-dd HH24:MI:SS'), 4, 'Rottweiler');
+
+INSERT INTO Animal
+VALUES (4005, 'Runn', TO_DATE('2023-10-12 09:35:21','yyyy-MM-dd HH24:MI:SS'),  2, 'Golden Retriever');
+
+INSERT INTO Animal
+VALUES (4006, 'Runn', TO_DATE('2023-10-12 09:35:21','yyyy-MM-dd HH24:MI:SS'), 2, 'Arabian');
+
 
 -- Appointment
 INSERT INTO Appointment
@@ -267,7 +308,6 @@ VALUES (8003, 'Tori', 'victorious@mail.com', 8391, NULL);
 INSERT INTO Client
 VALUES (8004, 'Jade', 'jade@mail.com', 2309, 3212);
 
-
 -- Feed
 INSERT INTO Feed
 VALUES (6000, 4002, 'HarryStyles', 'Purina', 'Pro Plan Live Clear', TO_TIMESTAMP('2024-10-13 10:30:00', 'yyyy-MM-dd HH24:MI:SS'));
@@ -283,7 +323,6 @@ VALUES (6003, 4005, 'HarryStyles', 'Purina', 'Layena Crumbles', TO_TIMESTAMP('20
 
 INSERT INTO Feed
 VALUES (6004, 4005, 'HarryStyles', 'Royal Canin', 'Feline Health Nutrition Indoor', TO_TIMESTAMP('2022-07-08 08:30:00', 'yyyy-MM-dd HH24:MI:SS'));
-
 
 -- Donation
 INSERT INTO Donation
@@ -306,7 +345,6 @@ VALUES (1305, TO_DATE('2024-11-24', 'yyyy-MM-dd'), 500.0, 8002);
 
 INSERT INTO Donation
 VALUES (1306, TO_DATE('2024-09-20', 'yyyy-MM-dd'), 2000, 8003);
-
 
 -- Fosters
 INSERT INTO Fosters
@@ -392,7 +430,6 @@ VALUES (103, 'Amy');
 INSERT INTO Volunteer(ID, Name)
 VALUES (104, 'Tracy');
 
-
 -- Walks
 INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
 VALUES (5000, 4000, 100, 1.5, TIMESTAMP '2024-10-12 15:30:21');
@@ -408,7 +445,6 @@ VALUES (5003, 4001, 101, NULL, TIMESTAMP '2024-07-01 12:24:42');
 
 INSERT INTO Walks(ID, Animal_ID, Volunteer_ID, Duration, DateTime)
 VALUES (5004, 4004, 104, 2.5, TIMESTAMP '2024-04-25 11:31:01');
-
 
 -- Vet Visit
 INSERT INTO VetVisit(ID, Animal_ID, DateTime)
