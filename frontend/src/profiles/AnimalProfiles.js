@@ -1,6 +1,7 @@
 import "./profiles.css"
 import React, { useState, useEffect } from 'react';
 import Modal from '@mui/material/Modal';
+import sanitization from "../sanitization";
 
 
 // import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
@@ -30,7 +31,7 @@ export default function AnimalProfiles() {
                 Arrival : a[2],
                 Age : a[3],
                 Breed: a[4],
-                Type: a[6]
+                Type: a[5]
             }
           ))
 
@@ -149,6 +150,72 @@ export default function AnimalProfiles() {
         )
     }
     
+    function SearchBar() {
+        async function handleSubmit(e) {
+            e.preventDefault();
+            const inputs = e.target.elements; 
+            sanitization(inputs.breed.value);
+            sanitization(inputs.type.value);
+            sanitization(inputs.name.value);
+            const crit =  {
+                "A.ID" : inputs.id.value,
+                "A.Name" : inputs.name.value,
+                "A.Age" : inputs.age.value,
+                "A.Breed" : inputs.breed.value,
+                "T.Type" : inputs.type.value,
+            };
+
+            
+            for (const k in crit) {
+                if (crit[k] === "" || crit[k] === undefined) {
+                    delete crit[k];
+                }
+            }
+
+            console.log(crit);
+            
+            const response = await fetch("/backend/fetch-selected-animals", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(crit),
+              });
+            const responseData = await response.json();
+            console.log(responseData);
+          const animalsAsObjects = responseData.data.map((a) => (
+            {
+                ID : a[0],
+                Name : a[1],
+                Arrival : a[2],
+                Age : a[3],
+                Breed: a[4],
+                Type: a[5]
+            }
+          ))
+          setAnimals(animalsAsObjects);
+        }
+
+        return (
+            <>
+                <form onSubmit={handleSubmit}> 
+                <label className="bold searchDesc">Name:</label>
+                <input type="text" name="name" className="searchBox"></input>
+                <label className="bold searchDesc">Breed:</label>
+                <input type="text" name="breed" className="searchBox"></input>
+                <label className="bold searchDesc">Type:</label>
+                <input type="text" name="type" className="searchBox"></input>
+                <label className="bold searchDesc">Age:</label>
+                <input type="number" name="age" className="searchBox"></input>
+                <label className="bold searchDesc">ID:</label>
+                <input type="number" name="id" className="searchBox"></input>
+                <button type="submit" className="projNotSelected">Search</button>
+                
+                </form>
+            </>
+        )
+    }
+
        return (
         <>
         <div><h1
@@ -159,6 +226,9 @@ export default function AnimalProfiles() {
         <div>        
             {DivisionButton()}{GroupByHavingButton()}
         </div>
+        <div>   
+            {SearchBar()}
+            </div>
         <div className="container">
         <div className="column names">{GetColumnContents(0, Math.ceil(animals.length / 2))}</div>
         <div className="column names">{GetColumnContents(Math.ceil(animals.length / 2), animals.length)}</div>
