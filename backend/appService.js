@@ -96,7 +96,7 @@ async function fetchClienttable() {
 
 async function fetchAnimaltable() {
   return await withOracleDB(async (connection) => {
-    const result = await connection.execute("SELECT * FROM Animal A, AnimalTypes T WHERE A.Breed = T.Breed");
+    const result = await connection.execute("SELECT A.ID, A.Name, A.ArrivalDate, A.Age, A.Breed, T.Type FROM Animal A, AnimalTypes T WHERE A.Breed = T.Breed");
     return result.rows;
   }).catch(() => {
     return [];
@@ -454,6 +454,28 @@ async function getClientProjection(columns) {
   });
 }
 
+async function selectAnimals(criteria) {
+  // construct WHERE body
+  let whereBody = ""
+  console.log(criteria);
+  const strTypes = ["A.Name", "A.Breed", "T.Type"];
+  const numTypes = ["A.Age", "A.ID"];
+  for (const k in criteria) {
+    if (strTypes.includes(k)) {
+      whereBody = whereBody + " AND " + `regexp_like(${k}, '${criteria[k]}', 'i')`;
+    } else if (numTypes.includes(k)) {
+      whereBody = whereBody + " AND " + `${k} = ${criteria[k]}`;
+    }
+  }
+  whereBody = "SELECT A.ID, A.Name, A.ArrivalDate, A.Age, A.Breed, T.Type FROM Animal A, AnimalTypes T WHERE A.Breed = T.Breed" + whereBody;
+  console.log("where body" + whereBody);
+
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(whereBody);
+    return result.rows;
+  })
+}
+
 module.exports = {
   testOracleConnection,
   fetchDemotableFromDb,
@@ -485,6 +507,7 @@ module.exports = {
   nestedAgg,
   getWalksPerVolunteer,
   getClientProjection,
+  selectAnimals,
 };
 
 

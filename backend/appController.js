@@ -219,4 +219,9 @@ router.get("/get-walks-per-volunteer", async (req, res) => {
   res.json({ data: result });
 });
 
+router.post("/fetch-selected-animals", async (req, res) => {
+  const result = await appService.selectAnimals(req.body);
+  res.json({data : result});
+})
+
 module.exports = router;
