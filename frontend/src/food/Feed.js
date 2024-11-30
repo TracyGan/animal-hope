@@ -67,7 +67,7 @@ function Feed() {
   };
 
   const clearData = () => {
-    setSelectedFeed(undefined);
+    setSelectedFeed("");
     setSelectedOption(undefined);
     setInputChange(undefined);
   };
@@ -92,6 +92,13 @@ function Feed() {
   const updateChanges = async (e) => {
     e.preventDefault();
     let formattedValue = inputChange;
+    if (selectedOption == "Datetime") {
+      const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+      if (!timeRegex.test(formattedValue)) {
+        alert("Error: Unable to update table!");
+      }
+    }
+
     sanitization(formattedValue);
     const response = await fetch("/backend/update-feed", {
       method: "POST",
@@ -108,7 +115,6 @@ function Feed() {
     if (responseData.success) {
       fetchFeedLog();
       alert("Successfully updated Feed table!");
-      console.log("Success!");
     } else {
       alert("error updating Feed table");
     }
@@ -159,7 +165,7 @@ function Feed() {
         fetchFeatures(selectedOption, "");
         break;
     }
-  }, [selectedOption]);
+  }, [selectedOption, featureInput]);
 
   return (
     <div className="Feed">
