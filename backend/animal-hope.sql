@@ -175,7 +175,6 @@ VALUES ('ADM Animal Nutrition', 'Pen Pals Rabbit Feed', 1, 45.0);
 INSERT INTO Food
 VALUES ('Purina', 'Layena Crumbles', 2, 20.0);
 
-
 -- Appointment
 INSERT INTO Appointment
 VALUES (3000, TO_DATE('2020-10-12 15:30:21', 'yyyy-MM-dd HH24:MI:SS'), 'Kennels');
